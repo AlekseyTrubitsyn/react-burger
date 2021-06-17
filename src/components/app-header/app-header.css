@@ -1,0 +1,15 @@
+.header {
+    width: 1280px;
+    padding: 16px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.header nav,
+.header .profile-button-wrapper {
+    flex-basis: 80%;
+}
+
+.header .profile-button-wrapper {
+    text-align: right;
+}

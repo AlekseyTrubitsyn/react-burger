@@ -1,0 +1,19 @@
+.header-button {
+    background: transparent;
+    border: none;
+    color: var(--text-inactive-color);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s all;
+}
+
+.header-button svg {
+    fill: currentColor;
+}
+
+.header-button:hover,
+.header-button:focus,
+.header-button.active {
+    color: var(--text-primary-color);
+}
