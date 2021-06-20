@@ -12,14 +12,14 @@ const propTypes = {
 
 class BurgerIngredients extends Component {
     state = {
-        selectedGroupId: "buns",
+        selectedGroupId: "bun",
         groups: [
             {
-                id: "buns",
+                id: "bun",
                 name: "Булки"
             },
             {
-                id: "sauces",
+                id: "sauce",
                 name: "Соусы"
             },
             {
@@ -43,20 +43,20 @@ class BurgerIngredients extends Component {
         const groupedSelectedItems = BurgerIngredients.groupSelectedItemsCount(this.props.selectedItems);
 
         return (
-            <div className="burger-ingredients">
+            <section className="burger-ingredients">
                 <BurgerIngredientsTabs
                     selectedGroupId={this.state.selectedGroupId}
                     tabs={this.state.groups}
                 />
                 {(this.state.groups || []).map(group => (
-                    <BurgerIngredientsGroup
+                    <BurgerIngredientsGroup 
                         key={group.id}
                         title={group.name}
                         data={this.props.data[group.id] || []}
                         selectedItems={groupedSelectedItems}
                     />
                 ))}
-            </div>
+            </section>
         );
     };
 };

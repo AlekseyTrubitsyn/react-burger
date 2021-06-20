@@ -6,3 +6,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
+.page-main .burger-ingredients,
+.page-main .burger-constructor {
+    width: calc(50% - 20px);
+}
