@@ -1,0 +1,13 @@
+.burger-ingredients-item {
+    width: 272px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.burger-ingredients-item > .text.text_type_digits-default {
+    display: flex;
+    align-items: center;
+}

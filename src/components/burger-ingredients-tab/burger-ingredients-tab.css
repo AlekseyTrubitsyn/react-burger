@@ -1,0 +1,13 @@
+.burger-ingredients-tab {
+    flex-basis: 33%;
+    flex-grow: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.burger-ingredients-tab.selected {
+    box-shadow: inset 0px -2px 0px #4C4CFF;
+}

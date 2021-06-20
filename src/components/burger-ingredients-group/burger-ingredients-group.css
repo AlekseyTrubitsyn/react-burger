@@ -1,0 +1,9 @@
+.burger-ingredients-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.burger-ingredients-group > .text.text_type_main-medium:first-child {
+    width: 100%;
+}

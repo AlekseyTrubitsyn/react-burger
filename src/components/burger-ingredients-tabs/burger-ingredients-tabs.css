@@ -1,0 +1,4 @@
+.burger-ingredients-tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
