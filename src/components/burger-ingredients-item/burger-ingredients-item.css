@@ -5,9 +5,25 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    position: relative;
 }
 
-.burger-ingredients-item > .text.text_type_digits-default {
+.burger-ingredients-item-price {
     display: flex;
     align-items: center;
+}
+
+.burger-ingredients-item-count {
+    font-style: normal;
+    background: var(--colors-interface-accent);
+    border-radius: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    box-sizing: border-box;
 }

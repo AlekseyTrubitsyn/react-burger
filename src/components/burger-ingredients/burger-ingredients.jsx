@@ -1,9 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, memo } from 'react'
+import PropTypes from 'prop-types'
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
+import { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
-import data from '../../data.json';
+const propTypes = {
+    selectedItems: PropTypes.arrayOf(PropTypes.string),
+    data: PropTypes.objectOf(PropTypes.arrayOf(burgerIngredientsItemPropTypes))
+};
 
 class BurgerIngredients extends Component {
     state = {
@@ -21,29 +26,22 @@ class BurgerIngredients extends Component {
                 id: "main",
                 name: "Начинки"
             }
-        ],
-        data: {
-            buns: [],
-            sauces: [],
-            main: []
-        }
+        ]
     };
 
-    updateData = () => {
-        this.setState({
-            data: {
-                buns: data.filter(({ type }) => type === 'bun'),
-                sauces: data.filter(({ type }) => type === 'sauce'),
-                main: data.filter(({ type }) => type === 'main'),
-            }
+    static groupSelectedItemsCount = (arr) => {
+        const result = {};
+
+        (arr || []).forEach(id => {
+            result[id] = (result[id] || 0) + 1;
         })
-    };
 
-    componentDidMount() {
-        this.updateData();
-    }
+        return result;
+    };
 
     render() {
+        const groupedSelectedItems = BurgerIngredients.groupSelectedItemsCount(this.props.selectedItems);
+
         return (
             <div className="burger-ingredients">
                 <BurgerIngredientsTabs
@@ -54,7 +52,8 @@ class BurgerIngredients extends Component {
                     <BurgerIngredientsGroup
                         key={group.id}
                         title={group.name}
-                        data={this.state.data[group.id] || []}
+                        data={this.props.data[group.id] || []}
+                        selectedItems={groupedSelectedItems}
                     />
                 ))}
             </div>
@@ -62,4 +61,5 @@ class BurgerIngredients extends Component {
     };
 };
 
-export default BurgerIngredients;
+BurgerIngredients.propTypes = propTypes;
+export default memo(BurgerIngredients);

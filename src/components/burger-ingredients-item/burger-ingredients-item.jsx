@@ -1,31 +1,47 @@
 import React, { memo } from 'react'
+import PropTypes from 'prop-types'
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import './burger-ingredients-item.css';
 
-const BurgerIngredientsItem = ({ selectedCount, image, price, name }) => (
-    <div className="burger-ingredients-item pr-3 pb-8 pl-3">
+export const burgerIngredientsItemPropTypes = PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+});
+
+const propTypes = {
+    data: burgerIngredientsItemPropTypes,
+    selectedCount: PropTypes.number.isRequired,
+};
+
+const BurgerIngredientsItem = ({ selectedCount, data }) => (
+    <div className="burger-ingredients-item mr-3 mb-8 ml-3">
         {!!selectedCount && (
-            <i className="burger-ingredients-item-count">{selectedCount}</i>
+            <i className="burger-ingredients-item-count text text_type_digits-default">
+                {selectedCount}
+            </i>
         )}
         <img
             className="mr-4 mb-1 ml-4"
-            src={image}
-            alt={name}
+            src={data.image}
+            alt={data.name}
             width="240"
             height="120"
         />
-        <p className="mb-1 text text_type_digits-default">
+        <p className="burger-ingredients-item-price mb-1 text text_type_digits-default">
             <span className="mr-2">
-                {price}
+                {data.price}
             </span>
             <CurrencyIcon type="primary" />
         </p>
         <span className="text text_type_main-default">
-            {name}
+            {data.name}
         </span>
     </div>
 );
 
+BurgerIngredientsItem.propTypes = propTypes;
 export default memo(BurgerIngredientsItem);

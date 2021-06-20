@@ -1,11 +1,17 @@
-import React from 'react'
-import { memo } from 'react';
+import React, { memo } from 'react'
+import PropTypes from 'prop-types'
 
-import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item';
+import BurgerIngredientsItem, { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
 import './burger-ingredients-group.css';
 
-const BurgerIngredientsGroup = ({ title, data }) => (
+const propTypes = {
+    title: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired,
+    selectedItems: PropTypes.objectOf(PropTypes.number).isRequired
+};
+
+const BurgerIngredientsGroup = ({ title, data, selectedItems }) => (
     <div className="burger-ingredients-group mb-2">
         <h2 className="text text_type_main-medium mb-6">
             {title}
@@ -13,8 +19,9 @@ const BurgerIngredientsGroup = ({ title, data }) => (
         {data && data.length
             ? data.map(item => (
                 <BurgerIngredientsItem
-                    key={item.id}
-                    {...item}
+                    key={item._id}
+                    data={item}
+                    selectedCount={selectedItems[item._id] || 0}
                 />
             ))
             : (
@@ -26,4 +33,5 @@ const BurgerIngredientsGroup = ({ title, data }) => (
     </div>
 );
 
+BurgerIngredientsGroup.propTypes = propTypes;
 export default memo(BurgerIngredientsGroup);
