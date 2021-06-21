@@ -4,9 +4,15 @@ import PropTypes from 'prop-types'
 import BurgerConstructorItem, { burgerConstructorItemPropTypes } from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
 
+import './burger-constructor.css';
+
 const propTypes = {
-    selectedItems: PropTypes.arrayOf(PropTypes.string,),
-    data: PropTypes.objectOf(burgerConstructorItemPropTypes),
+    selectedItems: PropTypes.arrayOf(
+        PropTypes.shape(burgerConstructorItemPropTypes),
+        ),
+    data: PropTypes.objectOf(
+        PropTypes.shape(burgerConstructorItemPropTypes),
+    ),
     total: PropTypes.number.isRequired,
 };
 
@@ -21,22 +27,29 @@ const BurgerConstructor = ({ selectedItems, total, data }) => {
                 <ul className="burger-constructor-list mb-10">
                     {firstElement && (
                         <BurgerConstructorItem
-                            key={firstElement._id}
+                            key={`${firstElement._id}_0`}
+                            className="mb-4"
                             isFirst
                             data={firstElement}
                         />
                     )}
-                    
-                    {draggableElements.map(itemData => (
-                        <BurgerConstructorItem
-                            key={itemData._id}
-                            data={itemData}
-                            draggable
-                        />
-                    ))}
+
+                    <li className="burger-constructor-draggable-list-container mb-4">
+                        <ul className="burger-constructor-draggable-list">
+                            {draggableElements.map((itemData, i, arr) => (
+                                <BurgerConstructorItem
+                                    key={`${itemData._id}_${i}`}
+                                    className={i < arr.length - 1 ? 'mb-4' : ''}
+                                    data={itemData}
+                                    draggable
+                                />
+                            ))}
+                        </ul>
+                    </li>
+
                     {lastElement && (
                         <BurgerConstructorItem
-                            key={lastElement._id}
+                            key={`${lastElement._id}_${selectedItems.length - 1}`}
                             isLast
                             data={lastElement}
                         />

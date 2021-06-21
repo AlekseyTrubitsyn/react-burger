@@ -9,5 +9,9 @@
 
 .page-main .burger-ingredients,
 .page-main .burger-constructor {
-    width: calc(50% - 20px);
+    max-width: calc(50% - 20px);
+    overflow: hidden;
+    max-height: calc(100vh - 220px);
+    display: flex;
+    flex-direction: column;
 }

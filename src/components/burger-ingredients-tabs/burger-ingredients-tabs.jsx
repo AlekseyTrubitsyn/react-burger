@@ -19,6 +19,7 @@ const BurgerIngredientsTabs = ({ tabs, selectedGroupId }) => (
     <div className="burger-ingredients-tabs mb-10">
         {(tabs || []).map(item => (
             <Tab
+                key={item.id}
                 value={item.id}
                 active={selectedGroupId === item.id}
                 onClick={() => {}}

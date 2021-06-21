@@ -5,15 +5,22 @@ import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 import { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
+import './burger-ingredients.css';
+
 const propTypes = {
-    selectedItems: PropTypes.arrayOf(PropTypes.string),
-    data: PropTypes.objectOf(PropTypes.arrayOf(burgerIngredientsItemPropTypes))
+    selectedItems: PropTypes.arrayOf(burgerIngredientsItemPropTypes),
+    data: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.arrayOf(burgerIngredientsItemPropTypes),
+            PropTypes.objectOf(burgerIngredientsItemPropTypes),
+        ])
+    )
 };
 
 class BurgerIngredients extends Component {
     state = {
         selectedGroupId: "bun",
-        groups: [
+        productTypes: [
             {
                 id: "bun",
                 name: "Булки"
@@ -46,16 +53,18 @@ class BurgerIngredients extends Component {
             <section className="burger-ingredients">
                 <BurgerIngredientsTabs
                     selectedGroupId={this.state.selectedGroupId}
-                    tabs={this.state.groups}
+                    tabs={this.state.productTypes}
                 />
-                {(this.state.groups || []).map(group => (
-                    <BurgerIngredientsGroup 
-                        key={group.id}
-                        title={group.name}
-                        data={this.props.data[group.id] || []}
-                        selectedItems={groupedSelectedItems}
-                    />
-                ))}
+                <ul className="burger-ingredients-groups">
+                    {(this.state.productTypes || []).map(group => (
+                        <BurgerIngredientsGroup 
+                            key={group.id}
+                            title={group.name}
+                            data={this.props.data[group.id] || []}
+                            selectedItems={groupedSelectedItems}
+                        />
+                    ))}
+                </ul>
             </section>
         );
     };

@@ -18,7 +18,7 @@ const propTypes = {
 };
 
 const BurgerIngredientsItem = ({ selectedCount, data }) => (
-    <div className="burger-ingredients-item mr-3 mb-8 ml-3">
+    <li className="burger-ingredients-item mr-3 mb-8 ml-3">
         {!!selectedCount && (
             <Counter count={selectedCount} size="default" />
         )}
@@ -38,7 +38,7 @@ const BurgerIngredientsItem = ({ selectedCount, data }) => (
         <span className="text text_type_main-default">
             {data.name}
         </span>
-    </div>
+    </li>
 );
 
 BurgerIngredientsItem.propTypes = propTypes;

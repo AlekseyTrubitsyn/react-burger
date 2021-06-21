@@ -16,20 +16,15 @@ const BurgerIngredientsGroup = ({ title, data, selectedItems }) => (
         <h2 className="text text_type_main-medium mb-6">
             {title}
         </h2>
-        {data && data.length
-            ? data.map(item => (
+        <ul className="burger-ingredients-list">
+            {data.map(item => (
                 <BurgerIngredientsItem
                     key={item._id}
                     data={item}
                     selectedCount={selectedItems[item._id] || 0}
                 />
-            ))
-            : (
-                <p className="text text_type_main-default">
-                    Нет данных
-                </p>
-            )
-        }
+            ))}
+        </ul>
     </div>
 );
 

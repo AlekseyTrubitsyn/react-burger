@@ -7,3 +7,8 @@
 .burger-ingredients-group > .text.text_type_main-medium:first-child {
     width: 100%;
 }
+
+.burger-ingredients-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
