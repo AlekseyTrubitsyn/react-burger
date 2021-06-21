@@ -23,17 +23,19 @@ export const dataPropTypes = PropTypes.shape({
     image_large: PropTypes.string,
 });
 
+const preselectedItemsIds = [
+    '60666c42cc7b410027a1a9b1',
+    '60666c42cc7b410027a1a9b9',
+    '60666c42cc7b410027a1a9b4',
+    '60666c42cc7b410027a1a9bc',
+    '60666c42cc7b410027a1a9bb',
+    '60666c42cc7b410027a1a9bb',
+    '60666c42cc7b410027a1a9b1'
+];
+
 class PageMain extends Component {
     state = {
-        selectedItems: [
-            '60666c42cc7b410027a1a9b1',
-            '60666c42cc7b410027a1a9b9',
-            '60666c42cc7b410027a1a9b4',
-            '60666c42cc7b410027a1a9bc',
-            '60666c42cc7b410027a1a9bb',
-            '60666c42cc7b410027a1a9bb',
-            '60666c42cc7b410027a1a9b1'
-        ],
+        selectedItems: [],
         total: 610,
         data: {
             bun: [],
@@ -46,20 +48,23 @@ class PageMain extends Component {
         const result = {};
 
         (arr || []).forEach(item => {
-            result[item._id] = (result[item._id] || []).concat(item);
+            result[item._id] = item;
         });
 
         return result;
     };
 
     updateData = () => {
+        const newData = {
+            allGroupedById: PageMain.groupDataById(data),
+            bun: data.filter(({ type }) => type === 'bun'),
+            sauce: data.filter(({ type }) => type === 'sauce'),
+            main: data.filter(({ type }) => type === 'main'),
+        };
+
         this.setState({
-            data: {
-                allGroupedById: PageMain.groupDataById(data),
-                bun: data.filter(({ type }) => type === 'bun'),
-                sauce: data.filter(({ type }) => type === 'sauce'),
-                main: data.filter(({ type }) => type === 'main'),
-            }
+            data: newData,
+            selectedItems: preselectedItemsIds.map(id => newData.allGroupedById[id]).filter(item => !!item)
         })
     };
 

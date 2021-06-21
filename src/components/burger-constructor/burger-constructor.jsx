@@ -10,26 +10,43 @@ const propTypes = {
     total: PropTypes.number.isRequired,
 };
 
-const BurgerConstructor = ({ selectedItems, total, data }) => (
-    <section className="burger-constructor pt-25 pr-4 pl-4">
-        {!!selectedItems && (
-            <ul className="burger-constructor-list mb-10">
-                {(selectedItems || []).map((id, i) => {
-                    const itemData = ((data || {})[id] || [])[0];
+const BurgerConstructor = ({ selectedItems, total, data }) => {
+    const firstElement = selectedItems[0];
+    const draggableElements = selectedItems.slice(1, -1) || [];
+    const lastElement = selectedItems.slice(-1)[0];
 
-                    return !!itemData && (
+    return (
+        <section className="burger-constructor pt-25 pr-4 pl-4">
+            {!!selectedItems && (
+                <ul className="burger-constructor-list mb-10">
+                    {firstElement && (
                         <BurgerConstructorItem
-                            key={id}
-                            data={itemData}
-                            draggable={i !== 0}
+                            key={firstElement._id}
+                            isFirst
+                            data={firstElement}
                         />
                     )}
-                )}
-            </ul>
-        )}
-        <BurgerConstructorTotal total={total} />
-    </section>
-);
+                    
+                    {draggableElements.map(itemData => (
+                        <BurgerConstructorItem
+                            key={itemData._id}
+                            data={itemData}
+                            draggable
+                        />
+                    ))}
+                    {lastElement && (
+                        <BurgerConstructorItem
+                            key={lastElement._id}
+                            isLast
+                            data={lastElement}
+                        />
+                    )}
+                </ul>
+            )}
+            <BurgerConstructorTotal total={total} />
+        </section>
+    );
+};
 
 BurgerConstructor.propTypes = propTypes;
 export default memo(BurgerConstructor);

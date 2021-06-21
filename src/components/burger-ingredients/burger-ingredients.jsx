@@ -29,12 +29,12 @@ class BurgerIngredients extends Component {
         ]
     };
 
-    static groupSelectedItemsCount = (arr) => {
+    static groupSelectedItemsCount = (arr = []) => {
         const result = {};
 
-        (arr || []).forEach(id => {
-            result[id] = (result[id] || 0) + 1;
-        })
+        arr.forEach(item => {
+            result[item._id] = (result[item._id] || 0) + 1;
+        });
 
         return result;
     };

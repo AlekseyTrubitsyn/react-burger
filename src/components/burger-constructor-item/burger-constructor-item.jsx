@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 
 import {
     DragIcon,
-    CurrencyIcon,
-    LockIcon,
-    DeleteIcon
-} from '@ya.praktikum/react-developer-burger-ui-components'; 
+    ConstructorElement
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import './burger-constructor-item.css';
 
@@ -17,40 +15,42 @@ export const burgerConstructorItemPropTypes = {
 
 const propTypes = {
     data: burgerConstructorItemPropTypes,
-    draggable: PropTypes.bool.isRequired,
+    isFirst: PropTypes.bool,
+    isLast: PropTypes.bool,
+    draggable: PropTypes.bool,
 };
 
-const BurgerConstructorItem = ({ draggable, data }) => (
-    <div className="burger-constructor-item pl-8 mb-4">
-        {!!draggable && (
-            <span className="burger-constructor-item-drag-icon">
-                <DragIcon type="primary" />
-            </span>
-        )}
-        <div className="burger-constructor-item-content pt-4 pr-8 pb-4 pl-6">
-            <img
-                className="mr-5"
-                src={data.image}
-                alt={data.name}
-                width={80}
-                height={40}
+const BurgerConstructorItem = ({ isFirst, isLast, draggable, data }) => {
+    let type = isFirst
+        ? 'top'
+        : isLast
+            ? 'bottom'
+            : undefined;
+
+    return (
+        <div className="burger-constructor-item pl-8 mb-4">
+            {!!draggable && (
+                <span className="burger-constructor-item-drag-icon">
+                    <DragIcon type="primary" />
+                </span>
+            )}
+            <ConstructorElement
+                type={type}
+                isLocked={!draggable}
+                text={data.name}
+                price={data.price}
+                thumbnail={data.image}
             />
-            <span className="burger-constructor-item-name text text_type_main-default mr-5">
-                {data.name}
-            </span>
-            <span className="text text_type_digits-default mr-2">
-                {data.price}
-            </span>
-            <span className="mr-5">
-                <CurrencyIcon type="primary" />
-            </span>
-            {draggable 
-                ? (<LockIcon type="primary" />) // TODO: DeleteIcon падает с ошибкой
-                : (<LockIcon  type="secondary" />)
-            }
         </div>
-    </div>
-);
+    );
+};
 
 BurgerConstructorItem.propTypes = propTypes;
+
+BurgerConstructorItem.defaultProps = {
+    isFirst: false,
+    isLast: false,
+    draggable: false
+};
+
 export default memo(BurgerConstructorItem);

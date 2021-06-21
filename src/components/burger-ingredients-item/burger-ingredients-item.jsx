@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import './burger-ingredients-item.css';
 
@@ -20,9 +20,7 @@ const propTypes = {
 const BurgerIngredientsItem = ({ selectedCount, data }) => (
     <div className="burger-ingredients-item mr-3 mb-8 ml-3">
         {!!selectedCount && (
-            <i className="burger-ingredients-item-count text text_type_digits-default">
-                {selectedCount}
-            </i>
+            <Counter count={selectedCount} size="default" />
         )}
         <img
             className="mr-4 mb-1 ml-4"
