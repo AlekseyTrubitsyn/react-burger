@@ -13,6 +13,7 @@ const propTypes = {
         }).isRequired
     ).isRequired,
     activeTab: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 const BurgerIngredientsTabs = ({ tabs, activeTab, onClick }) => (

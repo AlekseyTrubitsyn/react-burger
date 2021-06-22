@@ -9,7 +9,7 @@ import styles from './burger-constructor.module.css';
 const propTypes = {
     selectedItems: PropTypes.arrayOf(
         PropTypes.shape(burgerConstructorItemPropTypes),
-    ),
+    ).isRequired,
     total: PropTypes.number.isRequired,
 };
 

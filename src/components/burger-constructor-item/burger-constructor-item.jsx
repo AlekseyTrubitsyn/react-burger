@@ -18,7 +18,7 @@ const propTypes = {
     isFirst: PropTypes.bool,
     isLast: PropTypes.bool,
     draggable: PropTypes.bool,
-    data: PropTypes.shape(burgerConstructorItemPropTypes),
+    data: PropTypes.shape(burgerConstructorItemPropTypes).isRequired,
 };
 
 const BurgerConstructorItem = ({ isFirst, isLast, draggable, data }) => {

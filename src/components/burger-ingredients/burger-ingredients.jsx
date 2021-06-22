@@ -9,7 +9,7 @@ import styles from './burger-ingredients.module.css';
 
 const propTypes = {
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
-    data: PropTypes.arrayOf(burgerIngredientsItemPropTypes)
+    data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired
 };
 
 const tabs = [

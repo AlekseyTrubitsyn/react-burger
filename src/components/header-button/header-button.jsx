@@ -6,9 +6,7 @@ import styles from './header-button.module.css';
 const propTypes = {
     icon: PropTypes.oneOfType([ PropTypes.node, PropTypes.string ]).isRequired,
     text: PropTypes.string,
-    active: PropTypes.bool,
-    withoutPaddings: PropTypes.bool,
-    className: PropTypes.string,
+    active: PropTypes.bool
 };
 
 const HeaderButton = ({ icon, text, active }) => (
@@ -27,9 +25,7 @@ const HeaderButton = ({ icon, text, active }) => (
 
 HeaderButton.defaultProps = {
     text: '',
-    active: false,
-    withoutPaddings: false,
-    className: '',
+    active: false
 };
 
 HeaderButton.propTypes = propTypes;

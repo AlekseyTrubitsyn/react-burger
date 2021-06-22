@@ -13,7 +13,7 @@ export const burgerIngredientsItemPropTypes = PropTypes.shape({
 });
 
 const propTypes = {
-    data: burgerIngredientsItemPropTypes,
+    data: burgerIngredientsItemPropTypes.isRequired,
     selectedCount: PropTypes.number.isRequired,
 };
 
