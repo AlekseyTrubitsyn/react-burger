@@ -1,0 +1,5 @@
+.tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: calc(var(--offset-base-size) * 10);
+}

@@ -1,73 +1,70 @@
-import React, { Component, memo } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 import { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
-import './burger-ingredients.css';
+import styles from './burger-ingredients.module.css';
 
 const propTypes = {
-    selectedItems: PropTypes.arrayOf(burgerIngredientsItemPropTypes),
-    data: PropTypes.objectOf(
-        PropTypes.oneOfType([
-            PropTypes.arrayOf(burgerIngredientsItemPropTypes),
-            PropTypes.objectOf(burgerIngredientsItemPropTypes),
-        ])
-    )
+    selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
+    data: PropTypes.arrayOf(burgerIngredientsItemPropTypes)
 };
 
-class BurgerIngredients extends Component {
-    state = {
-        selectedGroupId: "bun",
-        productTypes: [
-            {
-                id: "bun",
-                name: "Булки"
-            },
-            {
-                id: "sauce",
-                name: "Соусы"
-            },
-            {
-                id: "main",
-                name: "Начинки"
-            }
-        ]
-    };
+const tabs = [
+    {
+        id: 'bun',
+        name: 'Булки'
+    },
+    {
+        id: 'sauce',
+        name: 'Соусы'
+    }, {
+        id: 'main',
+        name: 'Начинки'
+    }
+];
 
-    static groupSelectedItemsCount = (arr = []) => {
-        const result = {};
+const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
+    const [activeTab, setTab] = useState('bun');
 
-        arr.forEach(item => {
-            result[item._id] = (result[item._id] || 0) + 1;
-        });
+    const tabsWithValues = useMemo(
+        () => (
+            tabs.map(tab => ({
+                ...tab,
+                values: data.filter(({ type }) => tab.id === type)
+            }))
+        ),
+        [data]
+    );
 
-        return result;
-    };
+    const handleChangeTab = useCallback(
+        (nextTab) => {
+            setTab(nextTab);
+        },
+        []
+    );
 
-    render() {
-        const groupedSelectedItems = BurgerIngredients.groupSelectedItemsCount(this.props.selectedItems);
-
-        return (
-            <section className="burger-ingredients">
-                <BurgerIngredientsTabs
-                    selectedGroupId={this.state.selectedGroupId}
-                    tabs={this.state.productTypes}
-                />
-                <ul className="burger-ingredients-groups">
-                    {(this.state.productTypes || []).map(group => (
-                        <BurgerIngredientsGroup 
-                            key={group.id}
-                            title={group.name}
-                            data={this.props.data[group.id] || []}
-                            selectedItems={groupedSelectedItems}
-                        />
-                    ))}
-                </ul>
-            </section>
-        );
-    };
+    return (
+        <section>
+            <BurgerIngredientsTabs
+                activeTab={activeTab}
+                tabs={tabs}
+                onClick={handleChangeTab}
+            />
+            <ul className={styles.list}>
+                {tabsWithValues.map(tab => (
+                    <BurgerIngredientsGroup
+                        key={tab.id}
+                        title={tab.name}
+                        data={tab.values}
+                        selectedIdsWithCounts={selectedIdsWithCounts}
+                    />
+                ))}
+            </ul>
+        </section>
+    );
 };
 
 BurgerIngredients.propTypes = propTypes;

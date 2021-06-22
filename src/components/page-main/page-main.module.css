@@ -1,4 +1,4 @@
-.page-main {
+.main {
     width: 1240px;
     margin: 0 auto;
 
@@ -7,8 +7,7 @@
     justify-content: space-between;
 }
 
-.page-main .burger-ingredients,
-.page-main .burger-constructor {
+.main > section {
     max-width: calc(50% - 20px);
     overflow: hidden;
     max-height: calc(100vh - 220px);

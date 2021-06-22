@@ -1,14 +1,15 @@
-.burger-ingredients-group {
+.group {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
 }
 
-.burger-ingredients-group > .text.text_type_main-medium:first-child {
+.header {
+    margin-bottom: calc(var(--offset-base-size) * 6);
     width: 100%;
 }
 
-.burger-ingredients-list {
+.list {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }

@@ -3,31 +3,31 @@ import PropTypes from 'prop-types'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import './burger-ingredients-tabs.css';
+import styles from './burger-ingredients-tabs.module.css';
 
 const propTypes = {
     tabs: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             name: PropTypes.string.isRequired,
-        })
-    ),
-    selectedGroupId: PropTypes.string.isRequired,
+        }).isRequired
+    ).isRequired,
+    activeTab: PropTypes.string.isRequired,
 };
 
-const BurgerIngredientsTabs = ({ tabs, selectedGroupId }) => (
-    <div className="burger-ingredients-tabs mb-10">
-        {(tabs || []).map(item => (
+const BurgerIngredientsTabs = ({ tabs, activeTab, onClick }) => (
+    <nav className={styles.tabs}>
+        {tabs.map(item => (
             <Tab
                 key={item.id}
                 value={item.id}
-                active={selectedGroupId === item.id}
-                onClick={() => {}}
+                active={activeTab === item.id}
+                onClick={onClick}
             >
                 {item.name}
             </Tab>
         ))}
-    </div>
+    </nav>
 );
 
 BurgerIngredientsTabs.propTypes = propTypes;

@@ -1,4 +1,4 @@
-.header-button {
+.button {
     background: transparent;
     border: none;
     color: var(--text-inactive-color);
@@ -6,14 +6,15 @@
     align-items: center;
     cursor: pointer;
     transition: 0.3s all;
+    margin: calc(var(--offset-base-size) * 4) calc(var(--offset-base-size) * 5);
 }
 
-.header-button svg {
+.button svg {
     fill: currentColor;
 }
 
-.header-button:hover,
-.header-button:focus,
-.header-button.active {
+.button:hover,
+.button:focus,
+.button.active {
     color: var(--text-primary-color);
 }

@@ -1,19 +1,25 @@
-.burger-ingredients-item {
+.item {
     width: 272px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
     position: relative;
+    margin: 0 calc(var(--offset-base-size) * 3) calc(var(--offset-base-size) * 8);
 }
 
-.burger-ingredients-item-price {
+.image {
+    margin: 0 calc(var(--offset-base-size) * 4) var(--offset-base-size);
+}
+
+.price {
     display: flex;
     align-items: center;
+    margin-bottom: var(--offset-base-size);
 }
 
-.burger-ingredients-item-count {
+.count {
     font-style: normal;
     background: var(--colors-interface-accent);
     border-radius: 16px;

@@ -1,9 +1,10 @@
-.burger-constructor-total {
+.total {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.burger-constructor-total svg {
+.total > svg {
     display: block;
+    margin-right: calc(var(--offset-base-size) * 10);
 }

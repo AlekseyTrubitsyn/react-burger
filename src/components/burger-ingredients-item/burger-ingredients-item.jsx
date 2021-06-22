@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import './burger-ingredients-item.css';
+import styles from './burger-ingredients-item.module.css';
 
 export const burgerIngredientsItemPropTypes = PropTypes.shape({
     _id: PropTypes.string.isRequired,
@@ -18,18 +18,18 @@ const propTypes = {
 };
 
 const BurgerIngredientsItem = ({ selectedCount, data }) => (
-    <li className="burger-ingredients-item mr-3 mb-8 ml-3">
+    <li className={styles.item}>
         {!!selectedCount && (
             <Counter count={selectedCount} size="default" />
         )}
         <img
-            className="mr-4 mb-1 ml-4"
+            className={styles.image}
             src={data.image}
             alt={data.name}
             width="240"
             height="120"
         />
-        <p className="burger-ingredients-item-price mb-1 text text_type_digits-default">
+        <p className={`${styles.price} text text_type_digits-default`}>
             <span className="mr-2">
                 {data.price}
             </span>

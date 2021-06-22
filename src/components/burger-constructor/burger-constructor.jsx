@@ -1,49 +1,55 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import BurgerConstructorItem, { burgerConstructorItemPropTypes } from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
 
-import './burger-constructor.css';
+import styles from './burger-constructor.module.css';
 
 const propTypes = {
     selectedItems: PropTypes.arrayOf(
-        PropTypes.shape(burgerConstructorItemPropTypes),
-        ),
-    data: PropTypes.objectOf(
         PropTypes.shape(burgerConstructorItemPropTypes),
     ),
     total: PropTypes.number.isRequired,
 };
 
-const BurgerConstructor = ({ selectedItems, total, data }) => {
-    const firstElement = selectedItems[0];
-    const draggableElements = selectedItems.slice(1, -1) || [];
-    const lastElement = selectedItems.slice(-1)[0];
+const BurgerConstructor = ({ selectedItems, total }) => {
+    const {
+        firstElement,
+        draggableElements,
+        lastElement
+    } = useMemo(
+        () => ({
+            firstElement: selectedItems[0],
+            draggableElements: selectedItems.slice(1, -1) || [],
+            lastElement: selectedItems.slice(-1)[0],
+        }),
+        [selectedItems]
+    );
 
     return (
-        <section className="burger-constructor pt-25 pr-4 pl-4">
+        <section className={styles.constructor}>
             {!!selectedItems && (
-                <ul className="burger-constructor-list mb-10">
+                <ul className={styles.list}>
                     {firstElement && (
                         <BurgerConstructorItem
                             key={`${firstElement._id}_0`}
-                            className="mb-4"
                             isFirst
                             data={firstElement}
                         />
                     )}
 
-                    <li className="burger-constructor-draggable-list-container mb-4">
-                        <ul className="burger-constructor-draggable-list">
-                            {draggableElements.map((itemData, i, arr) => (
-                                <BurgerConstructorItem
-                                    key={`${itemData._id}_${i}`}
-                                    className={i < arr.length - 1 ? 'mb-4' : ''}
-                                    data={itemData}
-                                    draggable
-                                />
-                            ))}
+                    <li className={styles.draggable}>
+                        <ul>
+                            {draggableElements.map(
+                                (item, i) => (
+                                    <BurgerConstructorItem
+                                        key={`${item._id}_${i}`}
+                                        data={item}
+                                        draggable
+                                    />
+                                )
+                            )}
                         </ul>
                     </li>
 

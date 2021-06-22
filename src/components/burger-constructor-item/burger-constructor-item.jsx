@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -6,7 +6,7 @@ import {
     ConstructorElement
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import './burger-constructor-item.css';
+import styles from './burger-constructor-item.module.css';
 
 export const burgerConstructorItemPropTypes = {
     image: PropTypes.string.isRequired,
@@ -15,25 +15,28 @@ export const burgerConstructorItemPropTypes = {
 };
 
 const propTypes = {
-    data: PropTypes.shape(burgerConstructorItemPropTypes),
     isFirst: PropTypes.bool,
     isLast: PropTypes.bool,
     draggable: PropTypes.bool,
+    data: PropTypes.shape(burgerConstructorItemPropTypes),
 };
 
-const BurgerConstructorItem = ({ className, isFirst, isLast, draggable, data }) => {
-    let type = isFirst
-        ? 'top'
-        : isLast
-            ? 'bottom'
-            : undefined;
+const BurgerConstructorItem = ({ isFirst, isLast, draggable, data }) => {
+    const type = useMemo(
+        () => (
+            isFirst
+                ? 'top'
+                : isLast
+                    ? 'bottom'
+                    : undefined
+        ),
+        [isFirst, isLast]
+    );
 
     return (
-        <li className={`burger-constructor-item pl-8 ${className || ''}`}>
+        <li className={styles.item}>
             {!!draggable && (
-                <span className="burger-constructor-item-drag-icon">
-                    <DragIcon type="primary" />
-                </span>
+                <DragIcon type="primary" />
             )}
             <ConstructorElement
                 type={type}

@@ -1,0 +1,15 @@
+.header {
+    width: 1280px;
+    padding: 16px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+}
+
+.header > div:last-child {
+    text-align: right;
+}
+
+.header > nav > button {
+    margin-right: calc(var(--offset-base-size) * 2);
+}

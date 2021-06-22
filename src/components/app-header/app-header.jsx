@@ -4,14 +4,13 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 
 import HeaderButton from '../header-button/header-button';
 
-import './app-header.css';
+import styles from './app-header.module.css';
 
 const AppHeader = () => (
-    <header className="header">
+    <header className={styles.header}>
         <nav>
             <HeaderButton
                 active
-                className="mr-2"
                 icon={( <BurgerIcon type="primary" /> )}
                 text="Конструктор"
             />
@@ -20,11 +19,8 @@ const AppHeader = () => (
                 text="Лента заказов"
             />
         </nav>
-        <HeaderButton
-            withoutPaddings
-            icon={( <Logo /> )}
-        />
-        <div className="profile-button-wrapper">
+        <Logo />
+        <div>
             <HeaderButton
                 icon={( <ProfileIcon type="primary" /> )}
                 text="Личный кабинет"

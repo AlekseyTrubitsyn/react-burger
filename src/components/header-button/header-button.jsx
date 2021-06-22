@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './app-header.css';
+import styles from './header-button.module.css';
 
 const propTypes = {
     icon: PropTypes.oneOfType([ PropTypes.node, PropTypes.string ]).isRequired,
@@ -11,10 +11,10 @@ const propTypes = {
     className: PropTypes.string,
 };
 
-const HeaderButton = ({ icon, text, active, withoutPaddings, className }) => (
+const HeaderButton = ({ icon, text, active }) => (
     <button
         type="button"
-        className={`header-button ${withoutPaddings ? '' : 'pt-4 pr-5 pb-4 pl-5'} ${active ? 'active' : ''} ${className}`}
+        className={`${styles.button} ${active ? 'active' : ''}`}
     >
         {icon}
         {!!text && (

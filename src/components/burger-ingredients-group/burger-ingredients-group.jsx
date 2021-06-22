@@ -3,29 +3,29 @@ import PropTypes from 'prop-types'
 
 import BurgerIngredientsItem, { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
-import './burger-ingredients-group.css';
+import styles from './burger-ingredients-group.module.css';
 
 const propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired,
-    selectedItems: PropTypes.objectOf(PropTypes.number).isRequired
+    selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number).isRequired
 };
 
-const BurgerIngredientsGroup = ({ title, data, selectedItems }) => (
-    <div className="burger-ingredients-group mb-2">
-        <h2 className="text text_type_main-medium mb-6">
+const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts }) => (
+    <li className={styles.group}>
+        <h2 className={`${styles.header} text text_type_main-medium`}>
             {title}
         </h2>
-        <ul className="burger-ingredients-list">
+        <ul className={styles.list}>
             {data.map(item => (
                 <BurgerIngredientsItem
                     key={item._id}
                     data={item}
-                    selectedCount={selectedItems[item._id] || 0}
+                    selectedCount={selectedIdsWithCounts[item._id] || 0}
                 />
             ))}
         </ul>
-    </div>
+    </li>
 );
 
 BurgerIngredientsGroup.propTypes = propTypes;

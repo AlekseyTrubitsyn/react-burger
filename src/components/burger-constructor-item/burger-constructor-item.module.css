@@ -1,0 +1,11 @@
+.item {
+    position: relative;
+    padding-left: calc(var(--offset-base-size) * 8);
+}
+
+.item > svg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
