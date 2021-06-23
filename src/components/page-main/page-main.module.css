@@ -1,0 +1,16 @@
+.main {
+    width: 1240px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.main > section {
+    max-width: calc(50% - 20px);
+    overflow: hidden;
+    max-height: calc(100vh - 220px);
+    display: flex;
+    flex-direction: column;
+}

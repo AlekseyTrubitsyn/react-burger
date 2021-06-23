@@ -1,0 +1,35 @@
+.item {
+    width: 272px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    margin: 0 calc(var(--offset-base-size) * 3) calc(var(--offset-base-size) * 8);
+}
+
+.image {
+    margin: 0 calc(var(--offset-base-size) * 4) var(--offset-base-size);
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--offset-base-size);
+}
+
+.count {
+    font-style: normal;
+    background: var(--colors-interface-accent);
+    border-radius: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    box-sizing: border-box;
+}

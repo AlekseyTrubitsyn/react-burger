@@ -1,0 +1,15 @@
+.group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.header {
+    margin-bottom: calc(var(--offset-base-size) * 6);
+    width: 100%;
+}
+
+.list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
