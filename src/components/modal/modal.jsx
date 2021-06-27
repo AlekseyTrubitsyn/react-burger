@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -13,27 +13,53 @@ const propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-const Modal = ({ open, title, children, onClose }) => (
-    !!open && (
-        createPortal(
-            <>
-                <div className={styles.overlay} onClick={onClose} />
-                <div className={`${styles.modal} p-10`}>
-                    <h2 className={`${styles.header} text text_type_main-large`}>
-                        {title && (
-                            <span>{title}</span>
-                        )}
-                        <CloseIcon onClick={onClose} />
-                    </h2>
-                    <div className={styles.content}>
-                        {children}
+const Modal = ({ open, title, children, onClose }) => {
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (!(e && e.key === 'Escape')) return;
+
+            onClose();
+        },
+        [onClose],
+    );
+
+    useEffect(
+        () => {
+            if (open) {
+                document.addEventListener('keydown', handleKeyDown)
+            } else {
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+        },
+        [open, handleKeyDown]
+    );
+
+    return (
+        !!open && (
+            createPortal(
+                <>
+                    <div className={styles.overlay} onClick={onClose} />
+                    <div className={`${styles.modal} p-10`}>
+                        <h2 className={`${styles.header} text text_type_main-large`}>
+                            {title && (
+                                <span>{title}</span>
+                            )}
+                            <CloseIcon onClick={onClose} />
+                        </h2>
+                        <div className={styles.content}>
+                            {children}
+                        </div>
                     </div>
-                </div>
-            </>,
-            document.getElementById("react-modals")
+                </>,
+                document.getElementById("react-modals")
+            )
         )
-    )
-);
+    );
+};
 
 Modal.propTypes = propTypes;
 
