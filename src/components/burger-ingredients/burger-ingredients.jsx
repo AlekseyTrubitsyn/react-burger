@@ -3,14 +3,25 @@ import PropTypes from 'prop-types'
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
-import { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
 import styles from './burger-ingredients.module.css';
 
 const propTypes = {
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
-    data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            image: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            image_large: PropTypes.string.isRequired,
+            calories: PropTypes.number.isRequired,
+            carbohydrates: PropTypes.number.isRequired,
+            fat: PropTypes.number.isRequired,
+            proteins: PropTypes.number.isRequired,
+        }),
+    ).isRequired
 };
 
 const tabs = [
@@ -27,11 +38,9 @@ const tabs = [
     }
 ];
 
-const defaultModalState = { open: false };
-
 const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
     const [activeTab, setTab] = useState('bun');
-    const [modalState, setModalState] = useState(defaultModalState);
+    const [modalState, setModalState] = useState({ open: false });
 
     const tabsWithValues = useMemo(
         () => (
@@ -63,7 +72,7 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
 
     const handleCloseModal = useCallback(
         () => {
-            setModalState(defaultModalState);
+            setModalState({ open: false });
         },
         []
     );
