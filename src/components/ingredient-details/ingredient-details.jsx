@@ -31,7 +31,7 @@ const IngredientDetails = ({
     return (
         <Modal
             title="Детали ингредиента"
-            open={open}
+            open
             onClose={onClose}
         >
             <img

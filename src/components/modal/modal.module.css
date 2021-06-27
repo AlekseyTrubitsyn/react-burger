@@ -32,6 +32,7 @@
 
 .header > svg {
     margin-left: auto;
+    cursor: pointer;
 }
 
 .content {

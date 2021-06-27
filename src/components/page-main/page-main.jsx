@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { calcCountsById } from '../../utils'
+;
 import PageTitle from '../page-title/page-title';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
+import OrderDetails from '../order-details/order-details';
 
 import styles from './page-main.module.css';
-import { calcCountsById } from '../../utils';
 
 const defaultSelectedIds = [
     '60d3b41abdacab0026a733c6',
@@ -24,6 +26,7 @@ const PageMain = () => {
     const [selectedIdsWithCounts, setSelectedIdsWithCounts] = useState({});
     const [selectedItems, setSelectedItems] = useState([]);
     const [total, setTotal] = useState(0);
+    const [showOrderDetails, setShowOrderDetails] = useState(false);
 
     const init = useCallback(
         async () => {
@@ -37,6 +40,20 @@ const PageMain = () => {
                 .catch(e => {
                     console.log(e);
                 })
+        },
+        []
+    );
+
+    const onOrderClick = useCallback(
+        () => {
+            setShowOrderDetails(true);
+        },
+        []
+    );
+
+    const handleCloseOrderDetails = useCallback(
+        () => {
+            setShowOrderDetails(false);
         },
         []
     );
@@ -71,6 +88,11 @@ const PageMain = () => {
             <BurgerConstructor
                 selectedItems={selectedItems}
                 total={total}
+                onOrderClick={onOrderClick}
+            />
+            <OrderDetails
+                open={showOrderDetails}
+                onClose={handleCloseOrderDetails}
             />
         </main>
     );

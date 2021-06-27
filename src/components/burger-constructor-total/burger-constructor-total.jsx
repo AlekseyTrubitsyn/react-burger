@@ -7,15 +7,16 @@ import styles from './burger-constructor-total.module.css';
 
 const propTypes = {
     total: PropTypes.number.isRequired,
+    onOrderClick: PropTypes.func.isRequired,
 };
 
-const BurgerConstructorTotal = ({ total }) => (
+const BurgerConstructorTotal = ({ total, onOrderClick }) => (
     <div className={styles.total}>
         <span className="text text_type_digits-medium mr-2">
             {total}
         </span>
         <CurrencyIcon type="primary" />
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={onOrderClick}>
             Оформить заказ
         </Button>
     </div>

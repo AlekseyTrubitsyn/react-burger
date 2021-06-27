@@ -11,9 +11,10 @@ const propTypes = {
         PropTypes.shape(burgerConstructorItemPropTypes),
     ).isRequired,
     total: PropTypes.number.isRequired,
+    onOrderClick: PropTypes.func.isRequired,
 };
 
-const BurgerConstructor = ({ selectedItems, total }) => {
+const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
     const {
         firstElement,
         draggableElements,
@@ -62,7 +63,7 @@ const BurgerConstructor = ({ selectedItems, total }) => {
                     )}
                 </ul>
             )}
-            <BurgerConstructorTotal total={total} />
+            <BurgerConstructorTotal total={total} onOrderClick={onOrderClick} />
         </section>
     );
 };
