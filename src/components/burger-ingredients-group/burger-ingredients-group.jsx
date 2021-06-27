@@ -8,10 +8,11 @@ import styles from './burger-ingredients-group.module.css';
 const propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired,
-    selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number).isRequired
+    selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number).isRequired,
+    onOpenDetails: PropTypes.func.isRequired,
 };
 
-const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts }) => (
+const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts, onOpenDetails }) => (
     <li className={styles.group}>
         <h2 className={`${styles.header} text text_type_main-medium`}>
             {title}
@@ -22,6 +23,7 @@ const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts }) => (
                     key={item._id}
                     data={item}
                     selectedCount={selectedIdsWithCounts[item._id] || 0}
+                    onOpenDetails={onOpenDetails}
                 />
             ))}
         </ul>

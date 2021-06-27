@@ -7,6 +7,7 @@ const App = () => (
   <>
     <AppHeader />
     <PageMain />
+    <div id="react-modals" />
   </>
 );
 

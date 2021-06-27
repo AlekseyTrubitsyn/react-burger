@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 import { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
 import styles from './burger-ingredients.module.css';
 
@@ -26,8 +27,11 @@ const tabs = [
     }
 ];
 
+const defaultModalState = { open: false };
+
 const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
     const [activeTab, setTab] = useState('bun');
+    const [modalState, setModalState] = useState(defaultModalState);
 
     const tabsWithValues = useMemo(
         () => (
@@ -46,6 +50,24 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
         []
     );
 
+    const handleOpenModal = useCallback(
+        (id) => {
+            const item = data.find(({ _id }) => _id === id);
+
+            if (!item) return;
+
+            setModalState({ open: true, item })
+        },
+        [data]
+    );
+
+    const handleCloseModal = useCallback(
+        () => {
+            setModalState(defaultModalState);
+        },
+        []
+    );
+
     return (
         <section>
             <BurgerIngredientsTabs
@@ -60,9 +82,14 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
                         title={tab.name}
                         data={tab.values}
                         selectedIdsWithCounts={selectedIdsWithCounts}
+                        onOpenDetails={handleOpenModal}
                     />
                 ))}
             </ul>
+            <IngredientDetails
+                {...modalState}
+                onClose={handleCloseModal}
+            />
         </section>
     );
 };
