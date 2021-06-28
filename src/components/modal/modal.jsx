@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import ModalOverlay from '../modal-overlay/modal-overlay';
+
 import styles from './modal.module.css';
 
 const propTypes = {
@@ -42,7 +44,7 @@ const Modal = ({ open, title, children, onClose }) => {
         !!open && (
             createPortal(
                 <>
-                    <div className={styles.overlay} onClick={onClose} />
+                    <ModalOverlay onClick={onClose} />
                     <div className={`${styles.modal} p-10`}>
                         <h2 className={`${styles.header} text text_type_main-large`}>
                             {title && (
