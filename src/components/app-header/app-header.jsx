@@ -9,23 +9,27 @@ import styles from './app-header.module.css';
 const AppHeader = () => (
     <header className={styles.header}>
         <nav>
-            <HeaderButton
-                active
-                icon={( <BurgerIcon type="primary" /> )}
-                text="Конструктор"
-            />
-            <HeaderButton
-                icon={( <ListIcon type="primary" /> )}
-                text="Лента заказов"
-            />
+            <ul>
+                <HeaderButton
+                    active
+                    icon={( <BurgerIcon type="primary" /> )}
+                    text="Конструктор"
+                />
+                <HeaderButton
+                    icon={( <ListIcon type="primary" /> )}
+                    text="Лента заказов"
+                />
+            </ul>
         </nav>
-        <Logo />
-        <div>
+        <a href="/">
+            <Logo />
+        </a>
+        <nav>
             <HeaderButton
                 icon={( <ProfileIcon type="primary" /> )}
                 text="Личный кабинет"
             />
-        </div>
+        </nav>
     </header>
 );
 
