@@ -35,7 +35,13 @@ const OrderDetails = ({
             <p className="text text_type_main-medium mb-15">
                 идентификатор заказа
             </p>
-            <img className="mb-15" src={orderDoneIcon} alt="Заказ принят" />
+            <img
+                className="mb-15"
+                src={orderDoneIcon}
+                alt="Заказ принят"
+                width="107"
+                height="102"
+            />
             <p className="text text_type_main-default mb-2">
                 Ваш заказ начали готовить
             </p>
