@@ -7,6 +7,7 @@ import PageTitle from '../page-title/page-title';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
 
 import styles from './app.module.css';
 
@@ -32,14 +33,20 @@ const App = () => {
     const init = useCallback(
         async () => {
             fetch(URL)
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+
+                    return Promise.reject(response.status);
+                })
                 .then(json => {
                     const { data } = json || {};
 
                     setData(data);
                 })
                 .catch(e => {
-                    console.log(e);
+                    console.error(`Не удалось получить данные. Статус: ${e}`);
                 })
         },
         []
@@ -94,10 +101,14 @@ const App = () => {
                     onOrderClick={onOrderClick}
                 />
             </main>
-            <OrderDetails
-                open={showOrderDetails}
-                onClose={handleCloseOrderDetails}
-            />
+            {showOrderDetails && (
+                <Modal
+                    open
+                    onClose={handleCloseOrderDetails}
+                >
+                    <OrderDetails />
+                </Modal>
+            )}
             <div id="react-modals" />
         </div>
     );

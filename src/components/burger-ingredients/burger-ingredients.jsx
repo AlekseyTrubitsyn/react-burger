@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 import styles from './burger-ingredients.module.css';
 
@@ -95,10 +96,15 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
                     />
                 ))}
             </ul>
-            <IngredientDetails
-                {...modalState}
-                onClose={handleCloseModal}
-            />
+            {modalState.open && (
+                <Modal
+                    title="Детали ингредиента"
+                    open
+                    onClose={handleCloseModal}
+                >
+                    <IngredientDetails item={modalState.item} />
+                </Modal>
+            )}
         </section>
     );
 };

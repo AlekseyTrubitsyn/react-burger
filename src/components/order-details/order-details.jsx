@@ -1,20 +1,10 @@
 import React, { memo, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 
-import Modal from '../modal/modal';
 import orderDoneIcon from '../../images/order-done-icon.svg';
 
 import styles from './order-details.module.css';
 
-const propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-};
-
-const OrderDetails = ({
-    open,
-    onClose
-}) => {
+const OrderDetails = () => {
     const [orderId, setOrderId] = useState('');
 
     useEffect(
@@ -25,10 +15,7 @@ const OrderDetails = ({
     );
 
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-        >
+        <>
             <h2 className={`${styles.orderId} text text_type_digits-large mt-2 mb-8`}>
                 {orderId}
             </h2>
@@ -48,9 +35,8 @@ const OrderDetails = ({
             <p className="text text_type_main-default text_color_inactive mb-15">
                 Дождитесь готовности на орбитальной станции
             </p>
-        </Modal>
+        </>
     );
 };
 
-OrderDetails.propTypes = propTypes;
 export default memo(OrderDetails);

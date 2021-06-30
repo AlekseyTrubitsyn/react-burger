@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
-import Modal from '../modal/modal';
 import IngredientNutritionFact from '../ingredient-nutrition-fact/ingredient-nutrition-fact';
 
 import styles from './ingredient-details.module.css';
@@ -16,24 +15,14 @@ export const itemDetailsPropTypes = {
 };
 
 const propTypes = {
-    open: PropTypes.bool.isRequired,
     item: PropTypes.shape(itemDetailsPropTypes),
-    onClose: PropTypes.func.isRequired,
 };
 
-const IngredientDetails = ({
-    open,
-    item,
-    onClose
-}) => {
-    if (!(open && item)) return null;
+const IngredientDetails = ({ item }) => {
+    if (!item) return null;
 
     return (
-        <Modal
-            title="Детали ингредиента"
-            open
-            onClose={onClose}
-        >
+        <>
             <img
                 className="mb-4"
                 src={item.image_large}
@@ -62,7 +51,7 @@ const IngredientDetails = ({
                     value={item.carbohydrates}
                 />
             </div>
-        </Modal>
+        </>
     );
 };
 
