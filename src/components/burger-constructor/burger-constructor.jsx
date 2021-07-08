@@ -1,20 +1,15 @@
-import React, { memo, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { memo, useContext, useMemo } from 'react'
 
-import BurgerConstructorItem, { burgerConstructorItemPropTypes } from '../burger-constructor-item/burger-constructor-item';
+import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
+
+import { BurgerContext } from '../app/app';
 
 import styles from './burger-constructor.module.css';
 
-const propTypes = {
-    selectedItems: PropTypes.arrayOf(
-        PropTypes.shape(burgerConstructorItemPropTypes),
-    ).isRequired,
-    total: PropTypes.number.isRequired,
-    onOrderClick: PropTypes.func.isRequired,
-};
+const BurgerConstructor = () => {
+    const { selectedItems } = useContext(BurgerContext);
 
-const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
     const {
         firstElement,
         draggableElements,
@@ -63,10 +58,9 @@ const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
                     )}
                 </ul>
             )}
-            <BurgerConstructorTotal total={total} onOrderClick={onOrderClick} />
+            <BurgerConstructorTotal />
         </section>
     );
 };
 
-BurgerConstructor.propTypes = propTypes;
 export default memo(BurgerConstructor);

@@ -13,6 +13,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 
 import styles from './app.module.css';
+import { createContext } from 'react';
 
 const defaultSelectedIds = [
     '60d3b41abdacab0026a733c6',
@@ -25,6 +26,12 @@ const defaultSelectedIds = [
 ];
 
 const URL = 'https://norma.nomoreparties.space/api/ingredients';
+
+export const BurgerContext = createContext({
+    selectedItems: [],
+    total: 0,
+    onOrderClick: () => {}
+});
 
 const App = () => {
     const [data, setData] = useState([]);
@@ -121,35 +128,37 @@ const App = () => {
 
     return (
         <div className={styles.wrapper}>
-            <AppHeader />
-            <main className={styles.main}>
-                <PageTitle />
-                <BurgerIngredients
-                    selectedIdsWithCounts={selectedIdsWithCounts}
-                    data={data}
-                    activeTab={activeTab}
-                    onChangeTab={setTab}
-                    onOpenIngredientDetails={handleOpenIngredientDetails}
-                />
-                <BurgerConstructor
-                    selectedItems={selectedItems}
-                    total={total}
-                    onOrderClick={handleOpenOrderDetails}
-                />
-            </main>
-            <Modal
-                open={modalState.open}
-                title={modalState.title}
-                onClose={handleCloseModal}
-            >
-                {modalState.elementName === 'OrderDetails' && (
-                    <OrderDetails />
-                )}
-                {modalState.elementName === 'IngredientDetails' && (
-                    <IngredientDetails {...modalState.props} />
-                )}
-            </Modal>
-            <div id="react-modals" />
+            <BurgerContext.Provider value={{
+                selectedItems,
+                total,
+                onOrderClick: handleOpenOrderDetails
+            }}>
+                <AppHeader />
+                <main className={styles.main}>
+                    <PageTitle />
+                    <BurgerIngredients
+                        selectedIdsWithCounts={selectedIdsWithCounts}
+                        data={data}
+                        activeTab={activeTab}
+                        onChangeTab={setTab}
+                        onOpenIngredientDetails={handleOpenIngredientDetails}
+                    />
+                    <BurgerConstructor />
+                </main>
+                <Modal
+                    open={modalState.open}
+                    title={modalState.title}
+                    onClose={handleCloseModal}
+                >
+                    {modalState.elementName === 'OrderDetails' && (
+                        <OrderDetails />
+                    )}
+                    {modalState.elementName === 'IngredientDetails' && (
+                        <IngredientDetails {...modalState.props} />
+                    )}
+                </Modal>
+                <div id="react-modals" />
+            </BurgerContext.Provider>
         </div>
     );
 };
