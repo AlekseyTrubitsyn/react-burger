@@ -31,6 +31,7 @@ const App = () => {
     const [selectedIdsWithCounts, setSelectedIdsWithCounts] = useState({});
     const [selectedItems, setSelectedItems] = useState([]);
     const [total, setTotal] = useState(0);
+    const [activeTab, setTab] = useState('bun');
 
     const initialModalState = useMemo(
         () => ({
@@ -126,6 +127,8 @@ const App = () => {
                 <BurgerIngredients
                     selectedIdsWithCounts={selectedIdsWithCounts}
                     data={data}
+                    activeTab={activeTab}
+                    onChangeTab={setTab}
                     onOpenIngredientDetails={handleOpenIngredientDetails}
                 />
                 <BurgerConstructor

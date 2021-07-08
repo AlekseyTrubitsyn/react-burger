@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
@@ -21,6 +21,8 @@ const propTypes = {
             proteins: PropTypes.number.isRequired,
         }),
     ).isRequired,
+    activeTab: PropTypes.string.isRequired,
+    onChangeTab: PropTypes.func.isRequired,
     onOpenIngredientDetails: PropTypes.func.isRequired,
 };
 
@@ -38,9 +40,7 @@ const tabs = [
     }
 ];
 
-const BurgerIngredients = ({ selectedIdsWithCounts, data, onOpenIngredientDetails }) => {
-    const [activeTab, setTab] = useState('bun');
-
+const BurgerIngredients = ({ selectedIdsWithCounts, data, activeTab, onChangeTab, onOpenIngredientDetails }) => {
     const tabsWithValues = useMemo(
         () => (
             tabs.map(tab => ({
@@ -53,9 +53,9 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data, onOpenIngredientDetail
 
     const handleChangeTab = useCallback(
         (nextTab) => {
-            setTab(nextTab);
+            onChangeTab(nextTab);
         },
-        []
+        [onChangeTab]
     );
 
     return (
