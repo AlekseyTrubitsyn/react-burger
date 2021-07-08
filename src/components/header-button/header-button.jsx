@@ -9,18 +9,15 @@ const propTypes = {
     active: PropTypes.bool
 };
 
-const HeaderButton = ({ icon, text, active }) => (
-    <button
-        type="button"
-        className={`${styles.button} ${active ? 'active' : ''}`}
-    >
-        {icon}
-        {!!text && (
+const HeaderButton = ({ icon, text, active, href }) => (
+    <li>
+        <a className={`${styles.button} ${active ? 'active' : ''}`} href={href}>
+            {icon}
             <span className="text text_type_main-default ml-2">
                 {text}
             </span>
-        )}
-    </button>
+        </a>
+    </li>
 );
 
 HeaderButton.defaultProps = {
