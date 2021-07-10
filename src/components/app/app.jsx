@@ -10,9 +10,12 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
+import fetchData from '../../utils/fetchData';
+
 import styles from './app.module.css';
 
-const URL = 'https://norma.nomoreparties.space/api/ingredients';
+const getDataURL = 'https://norma.nomoreparties.space/api/ingredients';
+const postOrderURL = 'https://norma.nomoreparties.space/api/orders';
 
 export const BurgerContext = createContext({
     selectedItems: [],
@@ -24,6 +27,7 @@ export const BurgerContext = createContext({
 const App = () => {
     const [data, setData] = useState([]);
     const [activeTab, setTab] = useState('bun');
+    const [orderState, setOrderState] = useState({ loading: true, number: '' });
 
     const [selectedItemsState, dispatchSelectedItems] = useReducer(
         selectedItemsReducer,
@@ -76,15 +80,29 @@ const App = () => {
     );
 
     const handleOpenOrderDetails = useCallback(
-        () => {
+        async () => {
             if (!orderButtonIsAvailable) return;
 
             setModalState({
                 open: true,
                 elementName: 'OrderDetails'
             });
+
+            setOrderState({ loading: true });
+
+            const orderData = await fetchData({
+                url: postOrderURL,
+                params: {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ingredients: (selectedItemsState.items.map(({ _id }) => _id))
+                    })
+                }
+            });
+
+            setOrderState({ loading: false, orderData })
         },
-        [orderButtonIsAvailable,]
+        [orderButtonIsAvailable, selectedItemsState.items]
     );
 
     const handleCloseModal = useCallback(
@@ -96,22 +114,11 @@ const App = () => {
 
     const init = useCallback(
         async () => {
-            fetch(URL)
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+            const { data, success } = await fetchData({ url: getDataURL });
 
-                    return Promise.reject(response.status);
-                })
-                .then(json => {
-                    const { data } = json || {};
+            if (!success) return;
 
-                    setData(data);
-                })
-                .catch(e => {
-                    console.error(`Не удалось получить данные. Статус: ${e}`);
-                })
+            setData(data);
         },
         []
     );
@@ -151,7 +158,7 @@ const App = () => {
                     onClose={handleCloseModal}
                 >
                     {modalState.elementName === 'OrderDetails' && (
-                        <OrderDetails />
+                        <OrderDetails {...orderState} />
                     )}
                     {modalState.elementName === 'IngredientDetails' && (
                         <IngredientDetails {...modalState.props} />

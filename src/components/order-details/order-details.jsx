@@ -1,23 +1,30 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 
 import orderDoneIcon from '../../images/order-done-icon.svg';
 
 import styles from './order-details.module.css';
 
-const OrderDetails = () => {
-    const [orderId, setOrderId] = useState('');
+const OrderDetails = ({ loading, orderData }) => {
+    if (loading) {
+        return (
+            <h2 className="text text_type_main-medium m-15">
+                Отправляем заказ
+            </h2>
+        );
+    };
 
-    useEffect(
-        () => {
-            setOrderId('034536');
-        },
-        []
-    );
+    if (!orderData.success) {
+        return (
+            <h2 className="text text_type_main-medium m-15">
+                Что-то пошло не так.. Попробуйте снова
+            </h2>
+        );
+    };
 
     return (
         <>
             <h2 className={`${styles.orderId} text text_type_digits-large mt-2 mb-8`}>
-                {orderId}
+                {orderData?.order?.number || 'без номера'}
             </h2>
             <p className="text text_type_main-medium mb-15">
                 идентификатор заказа
