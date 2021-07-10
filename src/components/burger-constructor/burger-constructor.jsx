@@ -11,15 +11,28 @@ const BurgerConstructor = () => {
     const { selectedItems } = useContext(BurgerContext);
 
     const {
-        firstElement,
+        topBun,
         draggableElements,
-        lastElement
+        bottomBun
     } = useMemo(
-        () => ({
-            firstElement: selectedItems[0],
-            draggableElements: selectedItems.slice(1, -1) || [],
-            lastElement: selectedItems.length > 1 ? selectedItems.slice(-1)[0] : null,
-        }),
+        () => {
+            const buns = [];
+            const filling = [];
+
+            selectedItems.forEach(item => {
+                if (item.type === 'bun') {
+                    buns.push(item);
+                } else {
+                    filling.push(item);
+                };
+            });
+
+            return ({
+                topBun: buns[0],
+                draggableElements: filling,
+                bottomBun: buns[1],
+            })
+        },
         [selectedItems]
     );
 
@@ -27,11 +40,12 @@ const BurgerConstructor = () => {
         <section className={styles.constructor}>
             {!!selectedItems && (
                 <ul className={styles.list}>
-                    {firstElement && (
+                    {topBun && (
                         <BurgerConstructorItem
-                            key={`${firstElement._id}_0`}
-                            isFirst
-                            data={firstElement}
+                            key={`${topBun._id}_0`}
+                            isLocked
+                            type='top'
+                            data={topBun}
                         />
                     )}
 
@@ -49,11 +63,12 @@ const BurgerConstructor = () => {
                         </ul>
                     </li>
 
-                    {lastElement && (
+                    {bottomBun && (
                         <BurgerConstructorItem
-                            key={`${lastElement._id}_${selectedItems.length - 1}`}
-                            isLast
-                            data={lastElement}
+                            key={`${bottomBun._id}_${selectedItems.length - 1}`}
+                            isLocked
+                            type='bottom'
+                            data={bottomBun}
                         />
                     )}
                 </ul>

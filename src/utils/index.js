@@ -1,9 +1,13 @@
-export const calcCountsById = (arr) => {
-    if (!(arr && Array.isArray(arr) && arr.length)) return {};
+export const calcCountsById = (items) => {
+    if (!(items && Array.isArray(items) && items.length)) return {};
 
     const result = {};
 
-    arr.forEach(id => {
+    items.forEach(item => {
+        const id = item._id;
+
+        if (!id) return;
+
         result[id] = (result[id] || 0) + 1;
     });
 

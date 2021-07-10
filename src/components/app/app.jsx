@@ -1,44 +1,43 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useReducer, createContext } from 'react';
 
-import { calcCountsById } from '../../utils';
+import selectedItemsReducer from './selected-items-reducer';
 
+import Modal from '../modal/modal';
 import AppHeader from '../app-header/app-header';
-
 import PageTitle from '../page-title/page-title';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
-import Modal from '../modal/modal';
-
 import styles from './app.module.css';
-import { createContext } from 'react';
-
-const defaultSelectedIds = [
-    '60d3b41abdacab0026a733c6',
-    '60d3b41abdacab0026a733ce',
-    '60d3b41abdacab0026a733c9',
-    '60d3b41abdacab0026a733d1',
-    '60d3b41abdacab0026a733d0',
-    '60d3b41abdacab0026a733d0',
-    '60d3b41abdacab0026a733c6'
-];
 
 const URL = 'https://norma.nomoreparties.space/api/ingredients';
 
 export const BurgerContext = createContext({
     selectedItems: [],
-    total: 0,
+    selectedItemCounts: {},
+    selectedItemTotal: 0,
     onOrderClick: () => {}
 });
 
 const App = () => {
     const [data, setData] = useState([]);
-    const [selectedIdsWithCounts, setSelectedIdsWithCounts] = useState({});
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [total, setTotal] = useState(0);
     const [activeTab, setTab] = useState('bun');
+
+    const [selectedItemsState, dispatchSelectedItems] = useReducer(
+        selectedItemsReducer,
+        {
+            items: [],
+            counts: {},
+            total: 0,
+        }
+    );
+
+    const orderButtonIsAvailable = useMemo(
+        () => selectedItemsState.items.some(item => item.type === 'bun'),
+        [selectedItemsState.items]
+    );
 
     const initialModalState = useMemo(
         () => ({
@@ -52,16 +51,25 @@ const App = () => {
 
     const [modalState, setModalState] = useState(initialModalState);
 
+    const handleDeleteItem = useCallback(
+        (index) => {
+            dispatchSelectedItems({ type: "delete", payload: index });
+        },
+        []
+    );
+
     const handleOpenIngredientDetails = useCallback(
         (id) => {
             const item = data.find(({ _id }) => _id === id);
 
             if (!item) return;
 
+            dispatchSelectedItems({ type: "add", payload: item });
+
             setModalState({
-              open: true,
-              elementName: 'IngredientDetails',
-              props: { item }
+                open: true,
+                elementName: 'IngredientDetails',
+                props: { item }
             });
         },
         [data]
@@ -69,12 +77,14 @@ const App = () => {
 
     const handleOpenOrderDetails = useCallback(
         () => {
+            if (!orderButtonIsAvailable) return;
+
             setModalState({
                 open: true,
                 elementName: 'OrderDetails'
             });
         },
-        []
+        [orderButtonIsAvailable,]
     );
 
     const handleCloseModal = useCallback(
@@ -82,19 +92,6 @@ const App = () => {
             setModalState(initialModalState);
         },
         [initialModalState]
-    );
-
-    useEffect(
-        () => {
-            const selectedItems = defaultSelectedIds
-                .map(id => data.find(({ _id }) => id === _id))
-                .filter(item => !!item);
-
-            setSelectedItems(selectedItems);
-            setTotal(selectedItems.reduce((sum, { price }) => sum + price, 0))
-            setSelectedIdsWithCounts(calcCountsById(defaultSelectedIds));
-        },
-        [data]
     );
 
     const init = useCallback(
@@ -129,15 +126,18 @@ const App = () => {
     return (
         <div className={styles.wrapper}>
             <BurgerContext.Provider value={{
-                selectedItems,
-                total,
+                selectedItems: selectedItemsState.items,
+                selectedItemCounts: selectedItemsState.counts,
+                selectedItemTotal: selectedItemsState.total,
+                orderButtonIsAvailable,
+                onDeleteItem: handleDeleteItem,
                 onOrderClick: handleOpenOrderDetails
             }}>
                 <AppHeader />
                 <main className={styles.main}>
                     <PageTitle />
                     <BurgerIngredients
-                        selectedIdsWithCounts={selectedIdsWithCounts}
+                        selectedIdsWithCounts={selectedItemsState.counts}
                         data={data}
                         activeTab={activeTab}
                         onChangeTab={setTab}
