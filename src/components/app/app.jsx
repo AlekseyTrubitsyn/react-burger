@@ -28,6 +28,7 @@ const App = () => {
     const [data, setData] = useState([]);
     const [activeTab, setTab] = useState('bun');
     const [orderState, setOrderState] = useState({ loading: true });
+    const [itemForIngredientDetails, setItemForIngredientDetails] = useState({});
 
     const [selectedItemsState, dispatchSelectedItems] = useReducer(
         selectedItemsReducer,
@@ -69,11 +70,11 @@ const App = () => {
             if (!item) return;
 
             dispatchSelectedItems({ type: "add", payload: item });
+            setItemForIngredientDetails(item);
 
             setModalState({
                 open: true,
-                elementName: 'IngredientDetails',
-                props: { item }
+                elementName: 'IngredientDetails'
             });
         },
         [data]
@@ -108,6 +109,8 @@ const App = () => {
     const handleCloseModal = useCallback(
         () => {
             setModalState(initialModalState);
+            setOrderState({ loading: true });
+            setItemForIngredientDetails({});
         },
         [initialModalState]
     );
@@ -162,7 +165,7 @@ const App = () => {
                         <OrderDetails />
                     )}
                     {modalState.elementName === 'IngredientDetails' && (
-                        <IngredientDetails {...modalState.props} />
+                        <IngredientDetails item={itemForIngredientDetails} />
                     )}
                 </Modal>
                 <div id="react-modals" />
