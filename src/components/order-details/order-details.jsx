@@ -1,10 +1,15 @@
-import React, { memo } from 'react'
+import React, { memo, useContext } from 'react'
 
 import orderDoneIcon from '../../images/order-done-icon.svg';
+import { BurgerContext } from '../app/app';
 
 import styles from './order-details.module.css';
 
-const OrderDetails = ({ loading, orderData }) => {
+const OrderDetails = () => {
+    const { orderState } = useContext(BurgerContext);
+
+    const { loading, orderData } = orderState || {};
+
     if (loading) {
         return (
             <h2 className="text text_type_main-medium m-15">

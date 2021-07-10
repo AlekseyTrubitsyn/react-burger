@@ -1,6 +1,11 @@
 const fetchData = async ({ url, params = {} }) => {
     try {
-        const response = await fetch(url, params);
+        const response = await fetch(url, {
+            ...params,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
         if (!response.ok) {
             throw new Error(response.status)

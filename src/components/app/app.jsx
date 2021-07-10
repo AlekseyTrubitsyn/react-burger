@@ -27,7 +27,7 @@ export const BurgerContext = createContext({
 const App = () => {
     const [data, setData] = useState([]);
     const [activeTab, setTab] = useState('bun');
-    const [orderState, setOrderState] = useState({ loading: true, number: '' });
+    const [orderState, setOrderState] = useState({ loading: true });
 
     const [selectedItemsState, dispatchSelectedItems] = useReducer(
         selectedItemsReducer,
@@ -137,6 +137,7 @@ const App = () => {
                 selectedItemCounts: selectedItemsState.counts,
                 selectedItemTotal: selectedItemsState.total,
                 orderButtonIsAvailable,
+                orderState,
                 onDeleteItem: handleDeleteItem,
                 onOrderClick: handleOpenOrderDetails
             }}>
@@ -158,7 +159,7 @@ const App = () => {
                     onClose={handleCloseModal}
                 >
                     {modalState.elementName === 'OrderDetails' && (
-                        <OrderDetails {...orderState} />
+                        <OrderDetails />
                     )}
                     {modalState.elementName === 'IngredientDetails' && (
                         <IngredientDetails {...modalState.props} />
