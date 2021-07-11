@@ -9,10 +9,10 @@ const propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired,
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number).isRequired,
-    onOpenDetails: PropTypes.func.isRequired,
+    onOpenIngredientDetails: PropTypes.func.isRequired,
 };
 
-const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts, onOpenDetails }) => (
+const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts, onOpenIngredientDetails }) => (
     <li className={styles.group}>
         <h2 className={`${styles.header} text text_type_main-medium`}>
             {title}
@@ -23,7 +23,7 @@ const BurgerIngredientsGroup = ({ title, data, selectedIdsWithCounts, onOpenDeta
                     key={item._id}
                     data={item}
                     selectedCount={selectedIdsWithCounts[item._id] || 0}
-                    onOpenDetails={onOpenDetails}
+                    onOpenIngredientDetails={onOpenIngredientDetails}
                 />
             ))}
         </ul>

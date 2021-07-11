@@ -15,11 +15,11 @@ export const burgerIngredientsItemPropTypes = PropTypes.shape({
 const propTypes = {
     data: burgerIngredientsItemPropTypes.isRequired,
     selectedCount: PropTypes.number.isRequired,
-    onOpenDetails: PropTypes.func.isRequired,
+    onOpenIngredientDetails: PropTypes.func.isRequired,
 };
 
-const BurgerIngredientsItem = ({ selectedCount, data, onOpenDetails }) => (
-    <li className={styles.item} onClick={() => onOpenDetails(data._id)}>
+const BurgerIngredientsItem = ({ selectedCount, data, onOpenIngredientDetails }) => (
+    <li className={styles.item} onClick={() => onOpenIngredientDetails(data._id)}>
         {!!selectedCount && (
             <Counter count={selectedCount} size="default" />
         )}

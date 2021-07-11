@@ -1,82 +1,129 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { calcCountsById } from '../../utils';
+import React, { useState, useCallback, useEffect, useMemo, useReducer, createContext } from 'react';
 
+import selectedItemsReducer from './selected-items-reducer';
+
+import Modal from '../modal/modal';
 import AppHeader from '../app-header/app-header';
-
 import PageTitle from '../page-title/page-title';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
-import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+
+import fetchData from '../../utils/fetchData';
 
 import styles from './app.module.css';
 
-const defaultSelectedIds = [
-  '60d3b41abdacab0026a733c6',
-  '60d3b41abdacab0026a733ce',
-  '60d3b41abdacab0026a733c9',
-  '60d3b41abdacab0026a733d1',
-  '60d3b41abdacab0026a733d0',
-  '60d3b41abdacab0026a733d0',
-  '60d3b41abdacab0026a733c6'
-];
+const getDataURL = 'https://norma.nomoreparties.space/api/ingredients';
+const postOrderURL = 'https://norma.nomoreparties.space/api/orders';
 
-const URL = 'https://norma.nomoreparties.space/api/ingredients';
+export const BurgerContext = createContext({
+    selectedItems: [],
+    selectedItemCounts: {},
+    selectedItemTotal: 0,
+    onOrderClick: () => {}
+});
 
 const App = () => {
     const [data, setData] = useState([]);
-    const [selectedIdsWithCounts, setSelectedIdsWithCounts] = useState({});
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [showOrderDetails, setShowOrderDetails] = useState(false);
+    const [activeTab, setTab] = useState('bun');
+    const [orderState, setOrderState] = useState({ loading: true });
+    const [itemForIngredientDetails, setItemForIngredientDetails] = useState({});
+
+    const [selectedItemsState, dispatchSelectedItems] = useReducer(
+        selectedItemsReducer,
+        {
+            items: [],
+            counts: {},
+            total: 0,
+        }
+    );
+
+    const orderButtonIsAvailable = useMemo(
+        () => selectedItemsState.items.some(item => item.type === 'bun'),
+        [selectedItemsState.items]
+    );
+
+    const initialModalState = useMemo(
+        () => ({
+            open: false,
+            title: '',
+            elementName: '',
+            props: {}
+        }),
+        []
+    );
+
+    const [modalState, setModalState] = useState(initialModalState);
+
+    const handleDeleteItem = useCallback(
+        (index) => {
+            dispatchSelectedItems({ type: "delete", payload: index });
+        },
+        []
+    );
+
+    const handleOpenIngredientDetails = useCallback(
+        (id) => {
+            const item = data.find(({ _id }) => _id === id);
+
+            if (!item) return;
+
+            dispatchSelectedItems({ type: "add", payload: item });
+            setItemForIngredientDetails(item);
+
+            setModalState({
+                open: true,
+                elementName: 'IngredientDetails'
+            });
+        },
+        [data]
+    );
+
+    const handleOpenOrderDetails = useCallback(
+        async () => {
+            if (!orderButtonIsAvailable) return;
+
+            setModalState({
+                open: true,
+                elementName: 'OrderDetails'
+            });
+
+            setOrderState({ loading: true });
+
+            const orderData = await fetchData({
+                url: postOrderURL,
+                params: {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ingredients: (selectedItemsState.items.map(({ _id }) => _id))
+                    })
+                }
+            });
+
+            setOrderState({ loading: false, orderData })
+        },
+        [orderButtonIsAvailable, selectedItemsState.items]
+    );
+
+    const handleCloseModal = useCallback(
+        () => {
+            setModalState(initialModalState);
+            setOrderState({ loading: true });
+            setItemForIngredientDetails({});
+        },
+        [initialModalState]
+    );
 
     const init = useCallback(
         async () => {
-            fetch(URL)
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+            const { data, success } = await fetchData({ url: getDataURL });
 
-                    return Promise.reject(response.status);
-                })
-                .then(json => {
-                    const { data } = json || {};
+            if (!success) return;
 
-                    setData(data);
-                })
-                .catch(e => {
-                    console.error(`Не удалось получить данные. Статус: ${e}`);
-                })
+            setData(data);
         },
         []
-    );
-
-    const onOrderClick = useCallback(
-        () => {
-            setShowOrderDetails(true);
-        },
-        []
-    );
-
-    const handleCloseOrderDetails = useCallback(
-        () => {
-            setShowOrderDetails(false);
-        },
-        []
-    );
-
-    useEffect(
-        () => {
-            const selectedItems = defaultSelectedIds
-                .map(id => data.find(({ _id }) => id === _id))
-                .filter(item => !!item);
-
-            setSelectedItems(selectedItems);
-            setTotal(selectedItems.reduce((sum, { price }) => sum + price, 0))
-            setSelectedIdsWithCounts(calcCountsById(defaultSelectedIds));
-        },
-        [data]
     );
 
     useEffect(
@@ -88,28 +135,41 @@ const App = () => {
 
     return (
         <div className={styles.wrapper}>
-            <AppHeader />
-            <main className={styles.main}>
-                <PageTitle />
-                <BurgerIngredients
-                    selectedIdsWithCounts={selectedIdsWithCounts}
-                    data={data}
-                />
-                <BurgerConstructor
-                    selectedItems={selectedItems}
-                    total={total}
-                    onOrderClick={onOrderClick}
-                />
-            </main>
-            {showOrderDetails && (
+            <BurgerContext.Provider value={{
+                selectedItems: selectedItemsState.items,
+                selectedItemCounts: selectedItemsState.counts,
+                selectedItemTotal: selectedItemsState.total,
+                orderButtonIsAvailable,
+                orderState,
+                onDeleteItem: handleDeleteItem,
+                onOrderClick: handleOpenOrderDetails
+            }}>
+                <AppHeader />
+                <main className={styles.main}>
+                    <PageTitle />
+                    <BurgerIngredients
+                        selectedIdsWithCounts={selectedItemsState.counts}
+                        data={data}
+                        activeTab={activeTab}
+                        onChangeTab={setTab}
+                        onOpenIngredientDetails={handleOpenIngredientDetails}
+                    />
+                    <BurgerConstructor />
+                </main>
                 <Modal
-                    open
-                    onClose={handleCloseOrderDetails}
+                    open={modalState.open}
+                    title={modalState.title}
+                    onClose={handleCloseModal}
                 >
-                    <OrderDetails />
+                    {modalState.elementName === 'OrderDetails' && (
+                        <OrderDetails />
+                    )}
+                    {modalState.elementName === 'IngredientDetails' && (
+                        <IngredientDetails item={itemForIngredientDetails} />
+                    )}
                 </Modal>
-            )}
-            <div id="react-modals" />
+                <div id="react-modals" />
+            </BurgerContext.Provider>
         </div>
     );
 };

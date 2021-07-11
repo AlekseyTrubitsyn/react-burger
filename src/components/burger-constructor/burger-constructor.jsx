@@ -1,30 +1,38 @@
-import React, { memo, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { memo, useContext, useMemo } from 'react'
 
-import BurgerConstructorItem, { burgerConstructorItemPropTypes } from '../burger-constructor-item/burger-constructor-item';
+import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
+
+import { BurgerContext } from '../app/app';
 
 import styles from './burger-constructor.module.css';
 
-const propTypes = {
-    selectedItems: PropTypes.arrayOf(
-        PropTypes.shape(burgerConstructorItemPropTypes),
-    ).isRequired,
-    total: PropTypes.number.isRequired,
-    onOrderClick: PropTypes.func.isRequired,
-};
+const BurgerConstructor = () => {
+    const { selectedItems } = useContext(BurgerContext);
 
-const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
     const {
-        firstElement,
+        topBun,
         draggableElements,
-        lastElement
+        bottomBun
     } = useMemo(
-        () => ({
-            firstElement: selectedItems[0],
-            draggableElements: selectedItems.slice(1, -1) || [],
-            lastElement: selectedItems.length > 1 ? selectedItems.slice(-1)[0] : null,
-        }),
+        () => {
+            const buns = [];
+            const filling = [];
+
+            selectedItems.forEach(item => {
+                if (item.type === 'bun') {
+                    buns.push(item);
+                } else {
+                    filling.push(item);
+                };
+            });
+
+            return ({
+                topBun: buns[0],
+                draggableElements: filling,
+                bottomBun: buns[1],
+            })
+        },
         [selectedItems]
     );
 
@@ -32,11 +40,12 @@ const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
         <section className={styles.constructor}>
             {!!selectedItems && (
                 <ul className={styles.list}>
-                    {firstElement && (
+                    {topBun && (
                         <BurgerConstructorItem
-                            key={`${firstElement._id}_0`}
-                            isFirst
-                            data={firstElement}
+                            key={`${topBun._id}_0`}
+                            isLocked
+                            type='top'
+                            data={topBun}
                         />
                     )}
 
@@ -54,19 +63,19 @@ const BurgerConstructor = ({ selectedItems, total, onOrderClick }) => {
                         </ul>
                     </li>
 
-                    {lastElement && (
+                    {bottomBun && (
                         <BurgerConstructorItem
-                            key={`${lastElement._id}_${selectedItems.length - 1}`}
-                            isLast
-                            data={lastElement}
+                            key={`${bottomBun._id}_${selectedItems.length - 1}`}
+                            isLocked
+                            type='bottom'
+                            data={bottomBun}
                         />
                     )}
                 </ul>
             )}
-            <BurgerConstructorTotal total={total} onOrderClick={onOrderClick} />
+            <BurgerConstructorTotal />
         </section>
     );
 };
 
-BurgerConstructor.propTypes = propTypes;
 export default memo(BurgerConstructor);

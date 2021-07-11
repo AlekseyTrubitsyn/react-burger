@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -15,46 +15,31 @@ export const burgerConstructorItemPropTypes = {
 };
 
 const propTypes = {
-    isFirst: PropTypes.bool,
-    isLast: PropTypes.bool,
-    draggable: PropTypes.bool,
+    type: PropTypes.string,
+    isLocked: PropTypes.bool,
     data: PropTypes.shape(burgerConstructorItemPropTypes).isRequired,
 };
 
-const BurgerConstructorItem = ({ isFirst, isLast, draggable, data }) => {
-    const type = useMemo(
-        () => (
-            isFirst
-                ? 'top'
-                : isLast
-                    ? 'bottom'
-                    : undefined
-        ),
-        [isFirst, isLast]
-    );
-
-    return (
-        <li className={styles.item}>
-            {!!draggable && (
-                <DragIcon type="primary" />
-            )}
-            <ConstructorElement
-                type={type}
-                isLocked={!draggable}
-                text={data.name}
-                price={data.price}
-                thumbnail={data.image}
-            />
-        </li>
-    );
-};
+const BurgerConstructorItem = ({ type, isLocked, data }) => (
+    <li className={styles.item}>
+        {!isLocked && (
+            <DragIcon type="primary" />
+        )}
+        <ConstructorElement
+            type={type}
+            isLocked={isLocked}
+            text={data.name}
+            price={data.price}
+            thumbnail={data.image}
+        />
+    </li>
+);
 
 BurgerConstructorItem.propTypes = propTypes;
 
 BurgerConstructorItem.defaultProps = {
-    isFirst: false,
-    isLast: false,
-    draggable: false
+    type: undefined,
+    isLocked: false
 };
 
 export default memo(BurgerConstructorItem);

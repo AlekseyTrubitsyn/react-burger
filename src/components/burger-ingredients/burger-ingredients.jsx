@@ -1,10 +1,8 @@
-import React, { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
 
 import styles from './burger-ingredients.module.css';
 
@@ -22,7 +20,10 @@ const propTypes = {
             fat: PropTypes.number.isRequired,
             proteins: PropTypes.number.isRequired,
         }),
-    ).isRequired
+    ).isRequired,
+    activeTab: PropTypes.string.isRequired,
+    onChangeTab: PropTypes.func.isRequired,
+    onOpenIngredientDetails: PropTypes.func.isRequired,
 };
 
 const tabs = [
@@ -39,10 +40,7 @@ const tabs = [
     }
 ];
 
-const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
-    const [activeTab, setTab] = useState('bun');
-    const [modalState, setModalState] = useState({ open: false });
-
+const BurgerIngredients = ({ selectedIdsWithCounts, data, activeTab, onChangeTab, onOpenIngredientDetails }) => {
     const tabsWithValues = useMemo(
         () => (
             tabs.map(tab => ({
@@ -55,27 +53,9 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
 
     const handleChangeTab = useCallback(
         (nextTab) => {
-            setTab(nextTab);
+            onChangeTab(nextTab);
         },
-        []
-    );
-
-    const handleOpenModal = useCallback(
-        (id) => {
-            const item = data.find(({ _id }) => _id === id);
-
-            if (!item) return;
-
-            setModalState({ open: true, item })
-        },
-        [data]
-    );
-
-    const handleCloseModal = useCallback(
-        () => {
-            setModalState({ open: false });
-        },
-        []
+        [onChangeTab]
     );
 
     return (
@@ -92,19 +72,10 @@ const BurgerIngredients = ({ selectedIdsWithCounts, data }) => {
                         title={tab.name}
                         data={tab.values}
                         selectedIdsWithCounts={selectedIdsWithCounts}
-                        onOpenDetails={handleOpenModal}
+                        onOpenIngredientDetails={onOpenIngredientDetails}
                     />
                 ))}
             </ul>
-            {modalState.open && (
-                <Modal
-                    title="Детали ингредиента"
-                    open
-                    onClose={handleCloseModal}
-                >
-                    <IngredientDetails item={modalState.item} />
-                </Modal>
-            )}
         </section>
     );
 };
