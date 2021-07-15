@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { updateIngredientsList } from '../../services/actions/burgerIngredients';
-import { RESET_ORDER } from '../../services/actions/orderDetails';
 
 import Modal from '../modal/modal';
 import AppHeader from '../app-header/app-header';
