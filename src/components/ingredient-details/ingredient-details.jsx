@@ -1,24 +1,13 @@
 import React, { memo } from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux';
 
 import IngredientNutritionFact from '../ingredient-nutrition-fact/ingredient-nutrition-fact';
 
 import styles from './ingredient-details.module.css';
 
-export const itemDetailsPropTypes = {
-    image_large: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    calories: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    proteins: PropTypes.number.isRequired,
-};
+const IngredientDetails = () => {
+    const item = useSelector(store => store.ingredientDetails.item);
 
-const propTypes = {
-    item: PropTypes.shape(itemDetailsPropTypes),
-};
-
-const IngredientDetails = ({ item }) => {
     if (!item) return null;
 
     return (
@@ -55,6 +44,4 @@ const IngredientDetails = ({ item }) => {
     );
 };
 
-IngredientDetails.propTypes = propTypes;
-IngredientDetails.defaultProps = { item: null };
 export default memo(IngredientDetails);

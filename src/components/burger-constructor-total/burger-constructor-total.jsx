@@ -1,21 +1,36 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { showOrderDetails } from '../../services/actions/modal';
 
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-
-import { BurgerContext } from '../app/app';
 
 import styles from './burger-constructor-total.module.css';
 
 const BurgerConstructorTotal = () => {
-    const { selectedItemTotal, onOrderClick } = useContext(BurgerContext);
+    const dispatch = useDispatch();
 
+    const {
+        total,
+        itemIds
+    } = useSelector(store => ({
+        total: store.burgerConstructor.total,
+        itemIds: store.burgerConstructor.itemIds
+    }));
+
+    const handleOrderClick = useCallback(
+        () => {
+            dispatch(showOrderDetails(itemIds));
+        },
+        [dispatch, itemIds]
+    )
     return (
         <div className={styles.total}>
             <span className="text text_type_digits-medium mr-2">
-                {selectedItemTotal}
+                {total}
             </span>
             <CurrencyIcon type="primary" />
-            <Button type="primary" size="large" onClick={onOrderClick}>
+            <Button type="primary" size="large" onClick={handleOrderClick}>
                 Оформить заказ
             </Button>
         </div>

@@ -1,14 +1,13 @@
-import React, { memo, useContext, useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
+import { useSelector } from 'react-redux';
 
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
 
-import { BurgerContext } from '../app/app';
-
 import styles from './burger-constructor.module.css';
 
 const BurgerConstructor = () => {
-    const { selectedItems } = useContext(BurgerContext);
+    const selectedItems = useSelector(store => store.burgerConstructor.items);
 
     const {
         topBun,

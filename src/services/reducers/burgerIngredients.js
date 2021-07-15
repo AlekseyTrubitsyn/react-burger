@@ -12,33 +12,29 @@ const initialState = {
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_INGREDIENTS_REQUEST: {
+        case GET_INGREDIENTS_REQUEST:
             return {
                 ...state,
                 getIngredientsLoading: true,
                 getIngredientsFailed: false,
             };
-        }
 
-        case GET_INGREDIENTS_SUCCESS: {
+        case GET_INGREDIENTS_SUCCESS:
             return {
                 ...state,
                 getIngredientsLoading: false,
                 ingredients: action.ingredients,
                 getIngredientsFailed: false,
             };
-        }
 
-        case GET_INGREDIENTS_FAILED: {
+        case GET_INGREDIENTS_FAILED:
             return {
                 ...state,
                 getIngredientsLoading: false,
                 getIngredientsFailed: true,
             };
-        }
 
-        default: {
+        default:
             return state;
-        }
     }
 };
