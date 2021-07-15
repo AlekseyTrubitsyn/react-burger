@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect, useMemo, useReducer, createContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import selectedItemsReducer from './selected-items-reducer';
+import { updateIngredientsList } from '../../services/actions/burgerIngredients';
+import { postOrder } from '../../services/actions/orderDetails';
 
 import Modal from '../modal/modal';
 import AppHeader from '../app-header/app-header';
@@ -10,12 +12,9 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
-import fetchData from '../../utils/fetchData';
+import selectedItemsReducer from './selected-items-reducer';
 
 import styles from './app.module.css';
-
-const getDataURL = 'https://norma.nomoreparties.space/api/ingredients';
-const postOrderURL = 'https://norma.nomoreparties.space/api/orders';
 
 export const BurgerContext = createContext({
     selectedItems: [],
@@ -25,10 +24,13 @@ export const BurgerContext = createContext({
 });
 
 const App = () => {
-    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
+
     const [activeTab, setTab] = useState('bun');
     const [orderState, setOrderState] = useState({ loading: true });
     const [itemForIngredientDetails, setItemForIngredientDetails] = useState({});
+
+    const ingredients = useSelector(store => store?.ingredientsData?.ingredients || []);
 
     const [selectedItemsState, dispatchSelectedItems] = useReducer(
         selectedItemsReducer,
@@ -65,7 +67,7 @@ const App = () => {
 
     const handleOpenIngredientDetails = useCallback(
         (id) => {
-            const item = data.find(({ _id }) => _id === id);
+            const item = ingredients.find(({ _id }) => _id === id);
 
             if (!item) return;
 
@@ -77,7 +79,7 @@ const App = () => {
                 elementName: 'IngredientDetails'
             });
         },
-        [data]
+        [ingredients]
     );
 
     const handleOpenOrderDetails = useCallback(
@@ -91,19 +93,12 @@ const App = () => {
 
             setOrderState({ loading: true });
 
-            const orderData = await fetchData({
-                url: postOrderURL,
-                params: {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        ingredients: (selectedItemsState.items.map(({ _id }) => _id))
-                    })
-                }
-            });
+            const ids = (selectedItemsState?.items || []).map(({ _id }) => _id);
+            dispatch(postOrder(ids));
 
-            setOrderState({ loading: false, orderData })
+            setOrderState({ loading: false, orderData: [] })
         },
-        [orderButtonIsAvailable, selectedItemsState.items]
+        [orderButtonIsAvailable, selectedItemsState.items, dispatch]
     );
 
     const handleCloseModal = useCallback(
@@ -115,22 +110,11 @@ const App = () => {
         [initialModalState]
     );
 
-    const init = useCallback(
-        async () => {
-            const { data, success } = await fetchData({ url: getDataURL });
-
-            if (!success) return;
-
-            setData(data);
-        },
-        []
-    );
-
     useEffect(
         () => {
-            init();
+            dispatch(updateIngredientsList());
         },
-        [init]
+        [dispatch]
     );
 
     return (
@@ -149,7 +133,6 @@ const App = () => {
                     <PageTitle />
                     <BurgerIngredients
                         selectedIdsWithCounts={selectedItemsState.counts}
-                        data={data}
                         activeTab={activeTab}
                         onChangeTab={setTab}
                         onOpenIngredientDetails={handleOpenIngredientDetails}

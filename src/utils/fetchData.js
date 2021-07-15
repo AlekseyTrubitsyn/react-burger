@@ -15,7 +15,7 @@ const fetchData = async ({ url, params = {} }) => {
 
     } catch (e) {
         console.error(`Не удалось получить данные. Статус: ${e}`);
-        return {};
+        return { hasError: true };
     }
 }
 

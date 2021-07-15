@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux';
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
@@ -8,19 +9,6 @@ import styles from './burger-ingredients.module.css';
 
 const propTypes = {
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            image_large: PropTypes.string.isRequired,
-            calories: PropTypes.number.isRequired,
-            carbohydrates: PropTypes.number.isRequired,
-            fat: PropTypes.number.isRequired,
-            proteins: PropTypes.number.isRequired,
-        }),
-    ).isRequired,
     activeTab: PropTypes.string.isRequired,
     onChangeTab: PropTypes.func.isRequired,
     onOpenIngredientDetails: PropTypes.func.isRequired,
@@ -40,15 +28,17 @@ const tabs = [
     }
 ];
 
-const BurgerIngredients = ({ selectedIdsWithCounts, data, activeTab, onChangeTab, onOpenIngredientDetails }) => {
+const BurgerIngredients = ({ selectedIdsWithCounts, activeTab, onChangeTab, onOpenIngredientDetails }) => {
+    const ingredients = useSelector(store => store?.ingredientsData?.ingredients || []);
+
     const tabsWithValues = useMemo(
         () => (
             tabs.map(tab => ({
                 ...tab,
-                values: data.filter(({ type }) => tab.id === type)
+                values: ingredients.filter(({ type }) => tab.id === type)
             }))
         ),
-        [data]
+        [ingredients]
     );
 
     const handleChangeTab = useCallback(

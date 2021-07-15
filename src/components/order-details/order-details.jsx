@@ -1,16 +1,18 @@
-import React, { memo, useContext } from 'react'
+import React, { memo } from 'react'
+import { useSelector } from 'react-redux';
 
 import orderDoneIcon from '../../images/order-done-icon.svg';
-import { BurgerContext } from '../app/app';
 
 import styles from './order-details.module.css';
 
 const OrderDetails = () => {
-    const { orderState } = useContext(BurgerContext);
+    const { postOrderLoading, postOrderFailed, orderNumber } = useSelector(store => ({
+        postOrderLoading: store?.orderData.postOrderLoading,
+        postOrderFailed: store?.orderData.postOrderFailed,
+        orderNumber: store?.orderData.orderNumber,
+    }));
 
-    const { loading, orderData } = orderState || {};
-
-    if (loading) {
+    if (postOrderLoading) {
         return (
             <h2 className="text text_type_main-medium m-15">
                 Отправляем заказ
@@ -18,7 +20,7 @@ const OrderDetails = () => {
         );
     };
 
-    if (!orderData.success) {
+    if (postOrderFailed) {
         return (
             <h2 className="text text_type_main-medium m-15">
                 Что-то пошло не так.. Попробуйте снова
@@ -29,7 +31,7 @@ const OrderDetails = () => {
     return (
         <>
             <h2 className={`${styles.orderId} text text_type_digits-large mt-2 mb-8`}>
-                {orderData?.order?.number || 'без номера'}
+                {orderNumber || 'без номера'}
             </h2>
             <p className="text text_type_main-medium mb-15">
                 идентификатор заказа
