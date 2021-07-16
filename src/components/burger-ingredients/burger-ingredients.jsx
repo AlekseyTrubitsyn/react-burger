@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -40,6 +40,9 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
         selectedIdsWithCounts: store.burgerConstructor?.counts,
     }));
 
+    const [currentTabInView, setCurrentTabInView] = useState('bun');
+    const [, setVisibilityState] = useState({});
+
     const tabsWithValues = useMemo(
         () => (
             tabs.map(tab => ({
@@ -69,6 +72,37 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
         [onChangeTab]
     );
 
+    const handleShowInViewport = useCallback(
+        (tabId, isInView) => {
+            const findFirstVisibleTab = visibility => tabs.find(
+                ({ id }) => !!visibility[id]
+            );
+
+            setVisibilityState(s => {
+                const newState = {
+                    ...s,
+                    [tabId]: !!isInView
+                };
+
+                const tabInView = findFirstVisibleTab(newState);
+
+                if (tabInView) {
+                    setCurrentTabInView(tabInView.id);
+                }
+
+                return newState;
+            });
+        },
+        []
+    );
+
+    useEffect(
+        () => {
+            onChangeTab(currentTabInView);
+        },
+        [currentTabInView, onChangeTab]
+    );
+
     return (
         <section>
             <BurgerIngredientsTabs
@@ -80,9 +114,11 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
                 {tabsWithValues.map(tab => (
                     <BurgerIngredientsGroup
                         key={tab.id}
+                        id={tab.id}
                         title={tab.name}
                         data={tab.values}
                         selectedIdsWithCounts={selectedIdsWithCounts}
+                        onShowInViewport={handleShowInViewport}
                         onOpenIngredientDetails={handleOpenIngredientDetails}
                     />
                 ))}
