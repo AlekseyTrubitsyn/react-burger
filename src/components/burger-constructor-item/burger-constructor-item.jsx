@@ -16,7 +16,7 @@ export const burgerConstructorItemPropTypes = {
 };
 
 const propTypes = {
-    index: PropTypes.number.isRequired,
+    index: PropTypes.number,
     type: PropTypes.string,
     isLocked: PropTypes.bool,
     data: PropTypes.shape(burgerConstructorItemPropTypes).isRequired,
@@ -102,6 +102,7 @@ const BurgerConstructorItem = ({ index, type, isLocked, data, onMove, onDelete }
 BurgerConstructorItem.propTypes = propTypes;
 
 BurgerConstructorItem.defaultProps = {
+    index: -1,
     type: undefined,
     isLocked: false,
     onMove: () => {},

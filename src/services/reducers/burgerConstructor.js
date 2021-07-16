@@ -31,7 +31,7 @@ const calcCountsAndTotals = selectedItemsArray => (
 const getFlatSelectedItems = items => {
     const { topBun, bottomBun, main } = items || {};
 
-    return [topBun, bottomBun, ...(main || [])].filter(item => !!item);
+    return [topBun, ...(main || []), bottomBun].filter(item => !!item);
 };
 
 const getNewStateByAdd = ({ state, item }) => {
@@ -82,6 +82,26 @@ const getNewStateByDelete = ({ state, index }) => {
     };
 };
 
+const getNewStateByMove = ({ state, fromIndex, toIndex }) => {
+    debugger
+    const newMain = [...state.items.main];
+    const itemToMove = newMain.splice(fromIndex, 1)[0];
+    newMain.splice(toIndex, 0, itemToMove);
+
+    const newSelectedItems = {
+        ...state.items,
+        main: newMain,
+    };
+
+    const flatItems = getFlatSelectedItems(newSelectedItems);
+
+    return {
+        ...state,
+        items: newSelectedItems,
+        itemIds: flatItems.map(({ _id }) => _id),
+    };
+};
+
 export const burgerConstructorReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_INGREDIENT_TO_CONSTRUCTOR:
@@ -90,21 +110,8 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         case DELETE_INGREDIENT_FROM_CONSTRUCTOR:
             return getNewStateByDelete({ state, index: action.payload });
 
-        case MOVE_INGREDIENT: {
-            const { fromIndex, toIndex } = action.payload;
-
-            const newMain = [...state.items.main];
-            const itemToMove = newMain.splice(fromIndex, 1)[0];
-            newMain.splice(toIndex, 0, itemToMove);
-
-            return {
-                ...state,
-                items: {
-                    ...state.items,
-                    main: newMain,
-                },
-            };
-        }
+        case MOVE_INGREDIENT:
+            return getNewStateByMove({ state, ...action.payload })
 
         case RESET_CONSTRUCTOR:
             return initialState;
