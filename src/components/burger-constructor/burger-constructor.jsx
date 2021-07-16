@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteFromConstructor } from '../../services/actions/burgerConstructor';
 
@@ -21,7 +21,7 @@ const BurgerConstructor = () => {
             dispatch(deleteFromConstructor(id));
         },
         [dispatch]
-    )
+    );
 
     return (
         <section className={styles.constructor}>

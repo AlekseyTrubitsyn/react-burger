@@ -10,7 +10,6 @@ import { showIngredientDetails } from '../../services/actions/modal';
 import { addToConstructor } from '../../services/actions/burgerConstructor';
 
 const propTypes = {
-    selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
     activeTab: PropTypes.string.isRequired,
     onChangeTab: PropTypes.func.isRequired,
 };
