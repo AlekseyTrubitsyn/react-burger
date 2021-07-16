@@ -2,7 +2,7 @@ import React, { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 
-import { addToConstructor, deleteFromConstructor } from '../../services/actions/burgerConstructor';
+import { addToConstructor, deleteFromConstructor, moveFillerInConstructor } from '../../services/actions/burgerConstructor';
 
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
@@ -17,6 +17,18 @@ const BurgerConstructor = () => {
         main,
         bottomBun
     } = useSelector(store => store.burgerConstructor.items);
+
+    const handleMove = useCallback(
+        (fromIndex, toIndex) => {
+            dispatch(
+                moveFillerInConstructor({
+                    fromIndex,
+                    toIndex
+                })
+            );
+        },
+        [dispatch]
+    );
 
     const handleDrop = useCallback(
         (item) => {
@@ -55,9 +67,10 @@ const BurgerConstructor = () => {
                             (item, i) => (
                                 <BurgerConstructorItem
                                     index={i}
-                                    key={`${item._id}_${i}`}
+                                    key={item.key}
                                     data={item}
                                     draggable
+                                    onMove={handleMove}
                                     onDelete={handleDelete}
                                 />
                             )

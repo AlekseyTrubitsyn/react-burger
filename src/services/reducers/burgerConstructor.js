@@ -1,6 +1,7 @@
 import {
     ADD_INGREDIENT_TO_CONSTRUCTOR,
     DELETE_INGREDIENT_FROM_CONSTRUCTOR,
+    MOVE_INGREDIENT,
     RESET_CONSTRUCTOR
 } from '../actions/burgerConstructor';
 
@@ -45,7 +46,7 @@ const getNewStateByAdd = ({ state, item }) => {
 
         return {
             ...state?.items,
-            main: (state?.items?.main || []).concat(item)
+            main: (state?.items?.main || []).concat({ ...item, key: Math.round(Math.random() * 10e24) })
         }
     };
 
@@ -88,6 +89,22 @@ export const burgerConstructorReducer = (state = initialState, action) => {
 
         case DELETE_INGREDIENT_FROM_CONSTRUCTOR:
             return getNewStateByDelete({ state, index: action.payload });
+
+        case MOVE_INGREDIENT: {
+            const { fromIndex, toIndex } = action.payload;
+
+            const newMain = [...state.items.main];
+            const itemToMove = newMain.splice(fromIndex, 1)[0];
+            newMain.splice(toIndex, 0, itemToMove);
+
+            return {
+                ...state,
+                items: {
+                    ...state.items,
+                    main: newMain,
+                },
+            };
+        }
 
         case RESET_CONSTRUCTOR:
             return initialState;
