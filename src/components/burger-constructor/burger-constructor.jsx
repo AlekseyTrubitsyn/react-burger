@@ -1,5 +1,6 @@
-import React, { memo, useMemo } from 'react'
-import { useSelector } from 'react-redux';
+import React, { memo, useCallback, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteFromConstructor } from '../../services/actions/burgerConstructor';
 
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
@@ -7,6 +8,7 @@ import BurgerConstructorTotal from '../burger-constructor-total/burger-construct
 import styles from './burger-constructor.module.css';
 
 const BurgerConstructor = () => {
+    const dispatch = useDispatch();
     const selectedItems = useSelector(store => store.burgerConstructor.items);
 
     const {
@@ -35,6 +37,13 @@ const BurgerConstructor = () => {
         [selectedItems]
     );
 
+    const handleDelete = useCallback(
+        (id) => {
+            dispatch(deleteFromConstructor(id));
+        },
+        [dispatch]
+    )
+
     return (
         <section className={styles.constructor}>
             {!!selectedItems && (
@@ -56,6 +65,7 @@ const BurgerConstructor = () => {
                                         key={`${item._id}_${i}`}
                                         data={item}
                                         draggable
+                                        onDelete={handleDelete}
                                     />
                                 )
                             )}

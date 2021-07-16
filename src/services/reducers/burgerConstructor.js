@@ -49,8 +49,8 @@ const getNewStateByAdd = ({ state, item }) => {
     };
 };
 
-const getNewStateByDelete = ({ state, index }) => {
-    const newSelectedItems = [...(state.items || [])].splice(index, 1);
+const getNewStateByDelete = ({ state, idToDelete }) => {
+    const newSelectedItems = (state.items || []).filter(({ _id }) => idToDelete !== _id);
 
     return {
         ...state,
@@ -66,7 +66,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
             return getNewStateByAdd({ state, item: action.payload });
 
         case DELETE_INGREDIENT_FROM_CONSTRUCTOR:
-            return getNewStateByDelete({ state, index: action.payload });
+            return getNewStateByDelete({ state, idToDelete: action.payload });
 
         case RESET_CONSTRUCTOR:
             return initialState;
