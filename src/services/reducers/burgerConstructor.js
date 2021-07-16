@@ -10,11 +10,15 @@ const initialState = {
     orderButtonIsAvailable: false,
     total: 0,
     counts: {},
-    items: [],
+    items: {
+        topBun: null,
+        main: [],
+        bottomBun: null
+    },
     itemIds: []
 };
 
-const checkIfOrderButtonIsAvailable = items => (items || []).some(item => item.type === 'bun');
+const checkIfOrderButtonIsAvailable = items => !!(items.topBun && items.bottomBun);
 
 const calcCountsAndTotals = selectedItemsArray => (
     {
@@ -23,40 +27,56 @@ const calcCountsAndTotals = selectedItemsArray => (
     }
 );
 
+const getFlatSelectedItems = items => {
+    const { topBun, bottomBun, main } = items || {};
+
+    return [topBun, bottomBun, ...(main || [])].filter(item => !!item);
+};
+
 const getNewStateByAdd = ({ state, item }) => {
-    if (item.type === 'bun') {
-        const newSelectedItems = [...(state.items || [])]
-            .filter(item => item.type !== 'bun')
-            .concat([item, item]);
+    const getNewSelectedItems = () => {
+        if (item.type === 'bun') {
+            return {
+                ...state?.items,
+                topBun: item,
+                bottomBun: item,
+            }
+        };
 
         return {
-            ...state,
-            items: newSelectedItems,
-            itemIds: newSelectedItems.map(({ _id }) => _id),
-            ...calcCountsAndTotals(newSelectedItems),
-            orderButtonIsAvailable: checkIfOrderButtonIsAvailable(newSelectedItems)
-        };
+            ...state?.items,
+            main: (state?.items?.main || []).concat(item)
+        }
     };
 
-    const newSelectedItems = [...(state.items || [])].concat(item);
+    const newSelectedItems = getNewSelectedItems();
+    const flatItems = getFlatSelectedItems(newSelectedItems);
 
     return {
         ...state,
         items: newSelectedItems,
-        itemIds: newSelectedItems.map(({ _id }) => _id),
-        ...calcCountsAndTotals(newSelectedItems),
+        itemIds: flatItems.map(({ _id }) => _id),
+        ...calcCountsAndTotals(flatItems),
         orderButtonIsAvailable: checkIfOrderButtonIsAvailable(newSelectedItems)
     };
 };
 
 const getNewStateByDelete = ({ state, index }) => {
-    const newSelectedItems = [...(state.items || [])];
-    newSelectedItems.splice(index, 1);
+    const clonedMain = (state?.items?.main || []).slice();
+    clonedMain.splice(index, 1);
+
+    const newSelectedItems = {
+        ...state?.items,
+        main: clonedMain
+    }
+
+    const flatItems = getFlatSelectedItems(newSelectedItems);
 
     return {
         ...state,
         items: newSelectedItems,
-        ...calcCountsAndTotals(newSelectedItems),
+        itemIds: flatItems.map(({ _id }) => _id),
+        ...calcCountsAndTotals(flatItems),
         orderButtonIsAvailable: checkIfOrderButtonIsAvailable(newSelectedItems)
     };
 };

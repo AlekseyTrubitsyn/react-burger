@@ -9,33 +9,12 @@ import styles from './burger-constructor.module.css';
 
 const BurgerConstructor = () => {
     const dispatch = useDispatch();
-    const selectedItems = useSelector(store => store.burgerConstructor.items);
 
     const {
         topBun,
-        draggableElements,
+        main,
         bottomBun
-    } = useMemo(
-        () => {
-            const buns = [];
-            const filling = [];
-
-            selectedItems.forEach(item => {
-                if (item.type === 'bun') {
-                    buns.push(item);
-                } else {
-                    filling.push(item);
-                };
-            });
-
-            return ({
-                topBun: buns[0],
-                draggableElements: filling,
-                bottomBun: buns[1],
-            })
-        },
-        [selectedItems]
-    );
+    } = useSelector(store => store.burgerConstructor.items);
 
     const handleDelete = useCallback(
         (id) => {
@@ -46,43 +25,41 @@ const BurgerConstructor = () => {
 
     return (
         <section className={styles.constructor}>
-            {!!selectedItems && (
-                <ul className={styles.list}>
-                    {topBun && (
-                        <BurgerConstructorItem
-                            key={`${topBun._id}_0`}
-                            isLocked
-                            type='top'
-                            data={topBun}
-                        />
-                    )}
+            <ul className={styles.list}>
+                {topBun && (
+                    <BurgerConstructorItem
+                        key={`top_${topBun._id}`}
+                        isLocked
+                        type='top'
+                        data={topBun}
+                    />
+                )}
 
-                    <li className={styles.draggable}>
-                        <ul>
-                            {draggableElements.map(
-                                (item, i) => (
-                                    <BurgerConstructorItem
-                                        index={i}
-                                        key={`${item._id}_${i}`}
-                                        data={item}
-                                        draggable
-                                        onDelete={handleDelete}
-                                    />
-                                )
-                            )}
-                        </ul>
-                    </li>
+                <li className={styles.draggable}>
+                    <ul>
+                        {(main || []).map(
+                            (item, i) => (
+                                <BurgerConstructorItem
+                                    index={i}
+                                    key={`${item._id}_${i}`}
+                                    data={item}
+                                    draggable
+                                    onDelete={handleDelete}
+                                />
+                            )
+                        )}
+                    </ul>
+                </li>
 
-                    {bottomBun && (
-                        <BurgerConstructorItem
-                            key={`${bottomBun._id}_${selectedItems.length - 1}`}
-                            isLocked
-                            type='bottom'
-                            data={bottomBun}
-                        />
-                    )}
-                </ul>
-            )}
+                {bottomBun && (
+                    <BurgerConstructorItem
+                        key={`bottom_${bottomBun._id}`}
+                        isLocked
+                        type='bottom'
+                        data={bottomBun}
+                    />
+                )}
+            </ul>
             <BurgerConstructorTotal />
         </section>
     );
