@@ -7,6 +7,7 @@ import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredien
 
 import styles from './burger-ingredients.module.css';
 import { showIngredientDetails } from '../../services/actions/modal';
+import { addToConstructor } from '../../services/actions/burgerConstructor';
 
 const propTypes = {
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
@@ -56,6 +57,7 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
             if (!item) return;
 
             dispatch(showIngredientDetails(item));
+            dispatch(addToConstructor(item));
         },
         [ingredients, dispatch]
     );

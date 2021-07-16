@@ -1,4 +1,3 @@
-import { addToConstructor } from "./burgerConstructor";
 import { RESET_INGREDIENT_DETAILS, SHOW_INGREDIENT_DETAILS } from "./ingredientDetails";
 import { postOrder, RESET_ORDER } from "./orderDetails";
 
@@ -14,12 +13,10 @@ export const showIngredientDetails = ingredientData => dispatch => {
         }
     });
 
-    dispatch({ type: SHOW_INGREDIENT_DETAILS, payload: ingredientData })
-
-    dispatch(addToConstructor(ingredientData));
+    dispatch({ type: SHOW_INGREDIENT_DETAILS, payload: ingredientData });
 };
 
-export const showOrderDetails = ids => dispatch => {
+export const postOrderAndShowOrderDetails = ids => dispatch => {
     dispatch(postOrder(ids));
 
     dispatch({

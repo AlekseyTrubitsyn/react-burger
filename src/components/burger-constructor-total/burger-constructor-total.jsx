@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { showOrderDetails } from '../../services/actions/modal';
+import { postOrderAndShowOrderDetails } from '../../services/actions/modal';
 
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -20,7 +20,7 @@ const BurgerConstructorTotal = () => {
 
     const handleOrderClick = useCallback(
         () => {
-            dispatch(showOrderDetails(itemIds));
+            dispatch(postOrderAndShowOrderDetails(itemIds));
         },
         [dispatch, itemIds]
     )
