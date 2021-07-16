@@ -1,6 +1,8 @@
 import React, { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteFromConstructor } from '../../services/actions/burgerConstructor';
+import { useDrop } from 'react-dnd';
+
+import { addToConstructor, deleteFromConstructor } from '../../services/actions/burgerConstructor';
 
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import BurgerConstructorTotal from '../burger-constructor-total/burger-constructor-total';
@@ -16,6 +18,18 @@ const BurgerConstructor = () => {
         bottomBun
     } = useSelector(store => store.burgerConstructor.items);
 
+    const handleDrop = useCallback(
+        (item) => {
+            dispatch(addToConstructor(item));
+        },
+        [dispatch]
+    );
+
+    const [, ref] = useDrop({
+        accept: 'ingredient',
+        drop: handleDrop
+    });
+
     const handleDelete = useCallback(
         (id) => {
             dispatch(deleteFromConstructor(id));
@@ -24,7 +38,7 @@ const BurgerConstructor = () => {
     );
 
     return (
-        <section className={styles.constructor}>
+        <section className={styles.constructor} ref={ref}>
             <ul className={styles.list}>
                 {topBun && (
                     <BurgerConstructorItem

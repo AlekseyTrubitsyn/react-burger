@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { updateIngredientsList } from '../../services/actions/burgerIngredients';
 
@@ -26,14 +28,16 @@ const App = () => {
     return (
         <div className={styles.wrapper}>
             <AppHeader />
-            <main className={styles.main}>
-                <PageTitle />
-                <BurgerIngredients
-                    activeTab={activeTab}
-                    onChangeTab={setTab}
-                />
-                <BurgerConstructor />
-            </main>
+            <DndProvider backend={HTML5Backend}>
+                <main className={styles.main}>
+                    <PageTitle />
+                    <BurgerIngredients
+                        activeTab={activeTab}
+                        onChangeTab={setTab}
+                    />
+                    <BurgerConstructor />
+                </main>
+            </DndProvider>
             <Modal />
             <div id="react-modals" />
         </div>

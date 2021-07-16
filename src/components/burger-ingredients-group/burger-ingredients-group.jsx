@@ -1,16 +1,20 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useInView } from 'react-intersection-observer';
+import { useDispatch } from 'react-redux';
+
+import { showIngredientDetails } from '../../services/actions/modal';
 
 import BurgerIngredientsItem, { burgerIngredientsItemPropTypes } from '../burger-ingredients-item/burger-ingredients-item';
 
 import styles from './burger-ingredients-group.module.css';
-import { useInView } from 'react-intersection-observer';
 
 const propTypes = {
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(burgerIngredientsItemPropTypes).isRequired,
     selectedIdsWithCounts: PropTypes.objectOf(PropTypes.number).isRequired,
-    onOpenIngredientDetails: PropTypes.func.isRequired,
+    onShowInViewport: PropTypes.func.isRequired,
 };
 
 const BurgerIngredientsGroup = ({
@@ -18,10 +22,18 @@ const BurgerIngredientsGroup = ({
     title,
     data,
     selectedIdsWithCounts,
-    onShowInViewport,
-    onOpenIngredientDetails
+    onShowInViewport
 }) => {
     const { ref, inView } = useInView({ threshold: 0.3, delay: 200 });
+
+    const dispatch = useDispatch();
+
+    const handleOpen = useCallback(
+        (item) => {
+            dispatch(showIngredientDetails(item));
+        },
+        [dispatch]
+    );
 
     useEffect(
         () => {
@@ -41,7 +53,7 @@ const BurgerIngredientsGroup = ({
                         key={item._id}
                         data={item}
                         selectedCount={selectedIdsWithCounts[item._id] || 0}
-                        onOpenIngredientDetails={onOpenIngredientDetails}
+                        onOpen={handleOpen}
                     />
                 ))}
             </ul>

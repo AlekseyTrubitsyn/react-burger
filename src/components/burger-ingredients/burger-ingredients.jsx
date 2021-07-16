@@ -1,13 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 
 import styles from './burger-ingredients.module.css';
-import { showIngredientDetails } from '../../services/actions/modal';
-import { addToConstructor } from '../../services/actions/burgerConstructor';
 
 const propTypes = {
     activeTab: PropTypes.string.isRequired,
@@ -29,8 +27,6 @@ const tabs = [
 ];
 
 const BurgerIngredients = ({ activeTab, onChangeTab }) => {
-    const dispatch = useDispatch();
-
     const {
         ingredients,
         selectedIdsWithCounts
@@ -50,18 +46,6 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
             }))
         ),
         [ingredients]
-    );
-
-    const handleOpenIngredientDetails = useCallback(
-        (id) => {
-            const item = ingredients.find(({ _id }) => _id === id);
-
-            if (!item) return;
-
-            dispatch(showIngredientDetails(item));
-            dispatch(addToConstructor(item));
-        },
-        [ingredients, dispatch]
     );
 
     const handleChangeTab = useCallback(
@@ -118,7 +102,6 @@ const BurgerIngredients = ({ activeTab, onChangeTab }) => {
                         data={tab.values}
                         selectedIdsWithCounts={selectedIdsWithCounts}
                         onShowInViewport={handleShowInViewport}
-                        onOpenIngredientDetails={handleOpenIngredientDetails}
                     />
                 ))}
             </ul>
