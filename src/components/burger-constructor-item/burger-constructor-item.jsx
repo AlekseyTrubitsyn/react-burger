@@ -21,20 +21,16 @@ const propTypes = {
     onDelete: PropTypes.func.isRequired,
 };
 
-const BurgerConstructorItem = ({ type, isLocked, data, onDelete }) => {
+const BurgerConstructorItem = ({ index, type, isLocked, data, onDelete }) => {
     const handleClose = useCallback(
-        (e) => {
-            const itemId = e?.target?.closest('.burger-constructor-item')?.id || '';
-
-            if (!itemId) return;
-
-            onDelete(itemId);
+        () => {
+            onDelete(index);
         },
-        [onDelete]
+        [onDelete, index]
     );
 
     return (
-        <li className={`${styles.item} burger-constructor-item`} id={data._id}>
+        <li className={styles.item}>
             {!isLocked && (
                 <DragIcon type="primary" />
             )}

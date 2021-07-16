@@ -62,6 +62,7 @@ const BurgerConstructor = () => {
                             {draggableElements.map(
                                 (item, i) => (
                                     <BurgerConstructorItem
+                                        index={i}
                                         key={`${item._id}_${i}`}
                                         data={item}
                                         draggable
