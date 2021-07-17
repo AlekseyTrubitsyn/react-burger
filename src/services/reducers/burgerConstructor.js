@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid'
+
 import {
     ADD_INGREDIENT_TO_CONSTRUCTOR,
     DELETE_INGREDIENT_FROM_CONSTRUCTOR,
@@ -46,7 +48,7 @@ const getNewStateByAdd = ({ state, item }) => {
 
         return {
             ...state?.items,
-            main: (state?.items?.main || []).concat({ ...item, key: Math.round(Math.random() * 10e24) })
+            main: (state?.items?.main || []).concat({ ...item, key: nanoid() })
         }
     };
 
