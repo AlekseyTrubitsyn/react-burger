@@ -12,17 +12,17 @@ const BurgerConstructorTotal = () => {
 
     const {
         total,
-        itemIds
-    } = useSelector(store => ({
-        total: store.burgerConstructor.total,
-        itemIds: store.burgerConstructor.itemIds
-    }));
+        itemIds,
+        orderButtonIsAvailable
+    } = useSelector(store => store.burgerConstructor);
 
     const handleOrderClick = useCallback(
         () => {
+            if (!orderButtonIsAvailable) return;
+
             dispatch(postOrderAndShowOrderDetails(itemIds));
         },
-        [dispatch, itemIds]
+        [orderButtonIsAvailable, dispatch, itemIds]
     )
     return (
         <div className={styles.total}>
@@ -30,7 +30,11 @@ const BurgerConstructorTotal = () => {
                 {total}
             </span>
             <CurrencyIcon type="primary" />
-            <Button type="primary" size="large" onClick={handleOrderClick}>
+            <Button
+                type="primary"
+                size="large"
+                onClick={handleOrderClick}
+            >
                 Оформить заказ
             </Button>
         </div>
