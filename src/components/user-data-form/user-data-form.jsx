@@ -35,7 +35,7 @@ const UserDataForm = ({
     onChange,
     onClick
 }) => (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={e => { e.preventDefault(); }}>
         <div className="mb-20">
             <Logo />
         </div>

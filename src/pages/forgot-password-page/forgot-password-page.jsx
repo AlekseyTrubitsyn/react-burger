@@ -1,4 +1,8 @@
 import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
+
+import { requestPasswordReset } from '../../services/actions/userData';
 
 import UserDataForm from '../../components/user-data-form/user-data-form';
 import UserPageLinks from '../../components/user-page-links/user-page-links';
@@ -6,20 +10,27 @@ import UserPageLinks from '../../components/user-page-links/user-page-links';
 import styles from './forgot-password-page.module.css';
 
 const ForgotPasswordPage = () => {
-    const [values, setValues] = useState({
-        email: '',
-    });
+    const [email, setEmail] = useState('');
+
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleChange = useCallback(
         (e) => {
-            const { name, value } = e.target;
-
-            setValues(v => ({
-                ...v,
-                [name]: value
-            }));
+            setEmail(e.target.value);
         },
         []
+    );
+
+    const handleSubmit = useCallback(
+        () => {
+            const callback = () => {
+                history.replace('/reset-password')
+            };
+
+            dispatch(requestPasswordReset(email, callback));
+        },
+        [dispatch, email, history]
     );
 
     return (
@@ -27,10 +38,10 @@ const ForgotPasswordPage = () => {
             <UserDataForm
                 title="Восстановление пароля"
                 showEmail
-                values={values}
+                values={{ email }}
                 buttonText="Восстановить"
                 onChange={handleChange}
-                onClick={() => console.log('click')}
+                onClick={handleSubmit}
             />
 
             <UserPageLinks showRememberPassword />

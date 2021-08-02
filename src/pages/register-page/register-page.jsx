@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react'
+import { useDispatch } from 'react-redux';
 
 import UserDataForm from '../../components/user-data-form/user-data-form';
 import UserPageLinks from '../../components/user-page-links/user-page-links';
+import { registerNewUser } from '../../services/actions/userData';
 
 import styles from './register-page.module.css';
 
@@ -11,6 +13,8 @@ const RegisterPage = () => {
         email: '',
         password: '',
     });
+
+    const dispatch = useDispatch();
 
     const handleChange = useCallback(
         (e) => {
@@ -24,6 +28,13 @@ const RegisterPage = () => {
         []
     );
 
+    const handleSubmit = useCallback(
+        () => {
+            dispatch(registerNewUser(values));
+        },
+        [dispatch, values]
+    );
+
     return (
         <main className={`p-5 pt-30 ${styles.main}`}>
             <UserDataForm
@@ -34,7 +45,7 @@ const RegisterPage = () => {
                 values={values}
                 buttonText="Зарегистрироваться"
                 onChange={handleChange}
-                onClick={() => console.log('click')}
+                onClick={handleSubmit}
             />
 
             <UserPageLinks showAlreadyRegistered />
