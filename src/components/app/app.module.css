@@ -1,4 +1,9 @@
+:root {
+    --wrapper-width: 1280px;
+    --wrapper-margin: 0 auto;
+}
+
 .wrapper {
-    width: 1280px;
-    margin: 0 auto;
+    width: var(--wrapper-width);
+    margin: var(--wrapper-margin);
 }

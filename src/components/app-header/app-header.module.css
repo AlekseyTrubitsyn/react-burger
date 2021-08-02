@@ -1,5 +1,14 @@
+.backgroundWrapper {
+    background: var(--background);
+}
+
+.wrapper {
+    width: var(--wrapper-width);
+    margin: var(--wrapper-margin);
+}
+
 .header {
-    padding: 16px;
+    padding: calc(var(--offset-base-size) * 4);
     margin: 0 auto;
     display: grid;
     grid-template-columns: 2fr 1fr 2fr;
