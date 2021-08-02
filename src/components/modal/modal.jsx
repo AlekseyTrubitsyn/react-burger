@@ -1,28 +1,44 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { closeModal } from '../../services/actions/modal';
+
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import OrderDetails from '../order-details/order-details';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
 import styles from './modal.module.css';
 
-const propTypes = {
-    open: PropTypes.bool.isRequired,
-    title: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-    onClose: PropTypes.func.isRequired,
-};
+const Modal = () => {
+    const dispatch = useDispatch();
 
-const Modal = ({ open, title, children, onClose }) => {
+    const {
+        open,
+        elementName,
+        title
+    } = useSelector(store => ({
+        open: !!store.modal.open,
+        elementName: store.modal.elementName,
+        title: store.modal.title,
+    }));
+
+    const handleClose = useCallback(
+        () => {
+            dispatch(closeModal());
+        },
+        [dispatch]
+    );
+
     const handleKeyDown = useCallback(
         (e) => {
             if (!(e && e.key === 'Escape')) return;
 
-            onClose();
+            handleClose();
         },
-        [onClose],
+        [handleClose],
     );
 
     useEffect(
@@ -44,16 +60,21 @@ const Modal = ({ open, title, children, onClose }) => {
         !!open && (
             createPortal(
                 <>
-                    <ModalOverlay onClick={onClose} />
+                    <ModalOverlay onClick={handleClose} />
                     <div className={`${styles.modal} p-10`}>
                         <h2 className={`${styles.header} text text_type_main-large`}>
                             {title && (
                                 <span>{title}</span>
                             )}
-                            <CloseIcon onClick={onClose} />
+                            <CloseIcon onClick={handleClose} />
                         </h2>
                         <div className={styles.content}>
-                            {children}
+                            {elementName === 'OrderDetails' && (
+                                <OrderDetails />
+                            )}
+                            {elementName === 'IngredientDetails' && (
+                                <IngredientDetails />
+                            )}
                         </div>
                     </div>
                 </>,
@@ -61,12 +82,6 @@ const Modal = ({ open, title, children, onClose }) => {
             )
         )
     );
-};
-
-Modal.propTypes = propTypes;
-
-Modal.defaultProps = {
-    title: ''
 };
 
 export default memo(Modal);
