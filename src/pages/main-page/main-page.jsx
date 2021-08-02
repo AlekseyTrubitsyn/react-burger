@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { updateIngredientsList } from '../../services/actions/burgerIngredients';
 
-import styles from './app.module.css';
+import styles from './main-page.module.css';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -27,21 +27,20 @@ const MainPage = () => {
     );
 
     return (
-        <div className={styles.wrapper}>
-            <AppHeader />
-                <DndProvider backend={HTML5Backend}>
-                    <main className={styles.main}>
-                        <PageTitle />
-                        <BurgerIngredients
-                            activeTab={activeTab}
-                            onChangeTab={setTab}
-                        />
-                        <BurgerConstructor />
-                    </main>
-                </DndProvider>
+        <>
+            <DndProvider backend={HTML5Backend}>
+                <main className={styles.main}>
+                    <PageTitle />
+                    <BurgerIngredients
+                        activeTab={activeTab}
+                        onChangeTab={setTab}
+                    />
+                    <BurgerConstructor />
+                </main>
+            </DndProvider>
             <Modal />
             <div id="react-modals" />
-        </div>
+        </>
     );
 };
 
