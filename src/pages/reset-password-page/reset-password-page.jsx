@@ -3,12 +3,12 @@ import React, { useCallback, useState } from 'react';
 import UserDataForm from '../../components/user-data-form/user-data-form';
 import UserPageLinks from '../../components/user-page-links/user-page-links';
 
-import styles from './login-page.module.css';
+import styles from './reset-password-page.module.css';
 
-const LoginPage = () => {
+const ResetPasswordPage = () => {
     const [values, setValues] = useState({
-        email: '',
-        password: '',
+        newPassword: '',
+        code: '',
     });
 
     const handleChange = useCallback(
@@ -26,21 +26,18 @@ const LoginPage = () => {
     return (
         <main className={`p-5 pt-30 ${styles.main}`}>
             <UserDataForm
-                title="Вход"
-                showEmail
-                showPassword
+                title="Восстановление пароля"
+                showNewPassword
+                showCode
                 values={values}
-                buttonText="Войти"
+                buttonText="Сохранить"
                 onChange={handleChange}
                 onClick={() => console.log('click')}
             />
 
-            <UserPageLinks
-                showRegister
-                showForgotPassword
-            />
+            <UserPageLinks showRememberPassword />
         </main>
     );
 };
 
-export default LoginPage;
+export default ResetPasswordPage;

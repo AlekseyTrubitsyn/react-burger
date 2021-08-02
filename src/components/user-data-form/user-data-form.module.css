@@ -1,0 +1,12 @@
+.form {
+    text-align: center;
+    margin-bottom: calc(var(--offset-base-size) * 20);
+}
+
+.form > h1 {
+    text-align: center;
+}
+
+.form > *:not(:first-child):not(:last-child) {
+    margin-bottom: calc(var(--offset-base-size) * 6);
+}

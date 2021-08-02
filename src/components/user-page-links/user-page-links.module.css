@@ -1,0 +1,12 @@
+.link {
+    color: var(--colors-interface-accent);
+    text-decoration: none;
+    margin-left: calc(var(--offset-base-size) * 2);
+    transition: var(--common-transition);
+}
+
+.link:hover,
+.link:focus {
+    color: var(--text-primary-color);
+    opacity: .9;
+}
