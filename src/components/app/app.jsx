@@ -7,23 +7,24 @@ import RegisterPage from '../../pages/register-page/register-page';
 import LoginPage from '../../pages/login-page/login-page';
 import ForgotPasswordPage from '../../pages/forgot-password-page/forgot-password-page';
 import ResetPasswordPage from '../../pages/reset-password-page/reset-password-page';
+import UserProfilePage from '../../pages/user-profile-page/user-profile-page';
 
 import styles from './app.module.css';
 
 const App = () => (
     <div>
-        <AppHeader />
-        <div className={styles.wrapper}>
-            <Router>
+        <Router>
+            <AppHeader />
+            <div className={styles.wrapper}>
                 <Switch>
                     <Route path="/login" component={LoginPage} />
                     <Route path="/register" component={RegisterPage} />
                     <Route path="/forgot-password" component={ForgotPasswordPage} />
                     <Route path="/reset-password" component={ResetPasswordPage} />
                     {/*<Route path="/feed" component={} />
-                    <Route path="/feed/:id" component={} />
-                    <Route path="/profile" component={} />
-                    <Route path="/profile/orders" component={} />
+                    <Route path="/feed/:id" component={} />*/}
+                    <Route path="/profile" component={UserProfilePage} />
+                    {/*<Route path="/profile/orders" component={} />
                     <Route path="/profile/orders/:id" component={} />
                     <Route path="/ingredients/:id" component={} /> */}
                     <Route path="/" component={MainPage} exact />
@@ -33,8 +34,8 @@ const App = () => (
                         </div>
                     </Route>
                 </Switch>
-            </Router>
-        </div>
+            </div>
+        </Router>
     </div>
 );
 

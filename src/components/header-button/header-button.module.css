@@ -7,6 +7,7 @@
     cursor: pointer;
     transition: 0.3s all;
     margin: calc(var(--offset-base-size) * 4) calc(var(--offset-base-size) * 5);
+    text-decoration: none;
 }
 
 .button svg {
