@@ -1,9 +1,12 @@
+import { getCookie } from './cookie';
+
 const fetchData = async ({ url, params = {} }) => {
     try {
         const response = await fetch(url, {
             ...params,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: getCookie('token')
             }
         });
 

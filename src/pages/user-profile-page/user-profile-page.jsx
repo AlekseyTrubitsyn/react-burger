@@ -57,7 +57,7 @@ const UserProfilePage = () => {
                     >
                         История заказов
                     </Link>
-                    <Link className={`text text_type_main-medium ${styles.link}`}>
+                    <Link className={`text text_type_main-medium ${styles.link}`} to="/">
                         Выход
                     </Link>
                 </div>
