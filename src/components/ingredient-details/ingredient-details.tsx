@@ -1,0 +1,48 @@
+import React, { memo } from 'react'
+import { useSelector } from 'react-redux';
+import { RootState } from '../../services/store';
+
+import IngredientNutritionFact from '../ingredient-nutrition-fact/ingredient-nutrition-fact';
+
+import styles from './ingredient-details.module.css';
+
+const IngredientDetails = () => {
+    const item = useSelector((store: RootState) => store.ingredientDetails.item);
+
+    if (!item) return null;
+
+    return (
+        <>
+            <img
+                className="mb-4"
+                src={item.image_large}
+                width="480"
+                height="240"
+                alt={item.name}
+            />
+            <h2 className="text text_type_main-medium mb-8">
+                {item.name}
+            </h2>
+            <div className={`${styles.nutrition}`}>
+                <IngredientNutritionFact
+                    text="Калории, ккал"
+                    value={item.calories || 0}
+                />
+                <IngredientNutritionFact
+                    text="Белки, г"
+                    value={item.proteins || 0}
+                />
+                <IngredientNutritionFact
+                    text="Жиры, г"
+                    value={item.fat || 0}
+                />
+                <IngredientNutritionFact
+                    text="Углеводы, г"
+                    value={item.carbohydrates || 0}
+                />
+            </div>
+        </>
+    );
+};
+
+export default memo(IngredientDetails);

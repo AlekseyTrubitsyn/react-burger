@@ -1,4 +1,4 @@
-.constructor {
+.burger-constructor {
     max-height: 70vh;
     padding: calc(var(--offset-base-size) * 25) calc(var(--offset-base-size) * 4) 0;
 }
